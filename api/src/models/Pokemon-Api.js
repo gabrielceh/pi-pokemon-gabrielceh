@@ -8,12 +8,10 @@ module.exports = (sequelize) => {
 	 * Esto con el fin de que los id de los pokemon creados por el usuario
 	 * empiecen desde 20000
 	 */
-	sequelize.define('Pokemon', {
+	sequelize.define('Pokemon_Api', {
 		'id': {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
-			defaultValues: sequelize.literal("('nextval('id_pokemon_user_secuence')')"),
-			autoIncrement: true,
 			allowNull: false,
 		},
 		'name': {
