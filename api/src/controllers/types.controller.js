@@ -1,10 +1,17 @@
 const CustomError = require('../classes/CustomError');
-const { Types, Pokemon, Pokemon_Api } = require('../db');
+const { Types, Pokemon, Pokemon_Api, User } = require('../db');
 const { getTypesFromApi } = require('../utils/getTypesFromApi');
 const { pagination } = require('../utils/pagination');
 const { POKE_API_URL, TYPE_SOURCE } = require('../utils/pokeApiUrl');
 const { getMyHost } = require('../utils/localhost');
 const { orderBy, orderTypes } = require('../utils/orderValues');
+const { orderPokemonList } = require('../utils/orderPokemonList');
+const {
+	attributes,
+	includeTypes,
+	optionsApi,
+	optionsUser,
+} = require('../utils/optionToFindPokemon');
 
 const filterByIdList = (data = [], offset = 0, limit = 12) => {
 	/**Funcion para el paginado de los pokemon de la base de datos */
@@ -12,7 +19,7 @@ const filterByIdList = (data = [], offset = 0, limit = 12) => {
 	return dataSlice;
 };
 
-const getPokemonByTypes = async (id, orderby = null, ordertype = null) => {
+const getPokemonByTypes = async (model, id, orderby = null, ordertype = null, options = {}) => {
 	/** Obtenemos los pokemos filtrados por el id del tipo y nos devolverá solo el id del los que
 	 * cumplen con la condicion, y si vienen los parametros orderby y order los ordenará.
 	 * El bucle for nos ayudará a retornar los datos completos de los pokemon de ese tipo ya que
@@ -20,7 +27,7 @@ const getPokemonByTypes = async (id, orderby = null, ordertype = null) => {
 	 */
 	const order = orderby && ordertype && [[orderby, ordertype]];
 
-	const pokemonByType = await Pokemon_Api.findAll({
+	const pokemonByType = await model.findAll({
 		order,
 		attributes: ['id'],
 		include: [
@@ -34,32 +41,13 @@ const getPokemonByTypes = async (id, orderby = null, ordertype = null) => {
 			},
 		],
 	});
+
 	let pokemonWithType = [];
 
 	for (let pok of pokemonByType) {
-		const pk = await Pokemon_Api.findOne({
+		const pk = await model.findOne({
 			where: { id: pok.id },
-			attributes: [
-				'id',
-				'name',
-				'image',
-				'hp',
-				'attack',
-				'defense',
-				'special-attack',
-				'special-defense',
-				'weight',
-				'height',
-			],
-			include: [
-				{
-					model: Types,
-					attributes: ['id', 'name'],
-					through: {
-						attributes: [],
-					},
-				},
-			],
+			...options,
 		});
 		pokemonWithType.push(pk);
 	}
@@ -117,10 +105,32 @@ const typeFilterById = async (req, res) => {
 		offset = offset ? +offset : 0;
 		limit = limit ? +limit : 12;
 
-		const getPokemonByType = await getPokemonByTypes(foundedType.id, orderby, ordertype);
+		const getPokemonApiByType = await getPokemonByTypes(
+			Pokemon_Api,
+			foundedType.id,
+			orderby,
+			ordertype,
+			optionsApi
+		);
+
+		const getPokemonUserByType = await getPokemonByTypes(
+			Pokemon,
+			foundedType.id,
+			orderby,
+			ordertype,
+			optionsUser
+		);
+		console.log(getPokemonUserByType);
+
+		let listPokemonOrdered = [...getPokemonApiByType, ...getPokemonUserByType];
+
+		if (ordertype && orderby) {
+			listPokemonOrdered = orderPokemonList(listPokemonOrdered, orderby, ordertype);
+		}
+
 		const { count, nextOffset, prevOffset, dataList, maxPage, currentPage } = pagination(
 			filterByIdList,
-			getPokemonByType,
+			listPokemonOrdered,
 			offset,
 			limit
 		);

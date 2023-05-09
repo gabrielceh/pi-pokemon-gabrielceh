@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, literal } = require('sequelize');
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
@@ -9,52 +9,51 @@ module.exports = (sequelize) => {
 	 * empiecen desde 20000
 	 */
 	sequelize.define('Pokemon', {
-		'id': {
+		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
-			defaultValues: sequelize.literal("('nextval('id_pokemon_user_secuence')')"),
-			autoIncrement: true,
-			allowNull: false,
+			defaultValue: sequelize.literal("nextval('id_pokemon_user_secuence')"),
+			allowNull: true,
 		},
-		'name': {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			unique: true,
 		},
-		'image': {
+		image: {
 			type: DataTypes.STRING,
 			validate: {
 				isUrl: true, // Validación para verificar si es una URL
 			},
 		},
-		'hp': {
+		hp: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'attack': {
+		attack: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'defense': {
+		defense: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'special-attack': {
+		special_attack: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'special-defense': {
+		special_defense: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'speed': {
+		speed: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'height': {
+		height: {
 			type: DataTypes.FLOAT,
 		},
-		'weight': {
+		weight: {
 			type: DataTypes.FLOAT,
 		},
 	});

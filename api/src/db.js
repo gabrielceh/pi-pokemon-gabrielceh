@@ -28,7 +28,10 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Pokemon, Types, Pokemon_Api } = sequelize.models;
+const { Pokemon, Types, Pokemon_Api, User } = sequelize.models;
+
+// Aca vendrian las relaciones
+// Product.hasMany(Reviews);
 
 Pokemon.belongsToMany(Types, { through: 'pokemon-types' });
 Types.belongsToMany(Pokemon, { through: 'pokemon-types' });
@@ -36,13 +39,18 @@ Types.belongsToMany(Pokemon, { through: 'pokemon-types' });
 Pokemon_Api.belongsToMany(Types, { through: 'pokemon_api_types' });
 Types.belongsToMany(Pokemon_Api, { through: 'pokemon_api_types' });
 
-// Aca vendrian las relaciones
-// Product.hasMany(Reviews);
+Pokemon.belongsToMany(User, { through: 'user_pokemon' });
+User.belongsToMany(Pokemon, { through: 'user_pokemon' });
+
+// 1:N
+Pokemon.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' }); // lave foranea, onDelete eliminará el registro de todas las bd
+User.hasMany(Pokemon, { foreignKey: 'userId' }); // solo creará esta llave foranea y no la que crea por defecto
 
 module.exports = {
 	...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
 	Types,
 	Pokemon,
 	Pokemon_Api,
+	User,
 	conn: sequelize, // para importart la conexión { conn } = require('./db.js');
 };

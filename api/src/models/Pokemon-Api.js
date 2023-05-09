@@ -9,50 +9,50 @@ module.exports = (sequelize) => {
 	 * empiecen desde 20000
 	 */
 	sequelize.define('Pokemon_Api', {
-		'id': {
+		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			allowNull: false,
 		},
-		'name': {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			unique: true,
 		},
-		'image': {
+		image: {
 			type: DataTypes.STRING,
 			validate: {
 				isUrl: true, // Validación para verificar si es una URL
 			},
 		},
-		'hp': {
+		hp: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'attack': {
+		attack: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'defense': {
+		defense: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'special-attack': {
+		special_attack: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'special-defense': {
+		special_defense: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'speed': {
+		speed: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		'height': {
+		height: {
 			type: DataTypes.FLOAT,
 		},
-		'weight': {
+		weight: {
 			type: DataTypes.FLOAT,
 		},
 	});
