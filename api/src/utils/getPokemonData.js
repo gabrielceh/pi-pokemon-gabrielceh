@@ -8,7 +8,11 @@ async function getPokemonData(pokemonName) {
 	const data = await response.json();
 	let stats = {};
 	for (let stat of data.stats) {
-		stats[stat.stat.name] = stat.base_stat;
+		if (stat.stat.name.includes('-')) {
+			stats[stat.stat.name.replace('-', '_')] = stat.base_stat;
+		} else {
+			stats[stat.stat.name] = stat.base_stat;
+		}
 	}
 
 	let types = [];

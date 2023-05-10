@@ -62,24 +62,16 @@ const { getPokemonData } = require('../../utils/getPokemonData');
 // 		offset = offset ? +offset : 0;
 // 		limit = limit ? +limit : 12;
 
-// 		const { count, nextOffset, prevOffset, dataList, maxPage, currentPage } = pagination(
+// 		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
+// 		const { count, next, prev, dataList, maxPage, currentPage } = pagination(
+//			req
 // 			getPokemonSlice,
 // 			pokemonData,
 // 			offset,
-// 			limit
+// 			limit,
+// 			`pokemon`,
+// 			orderString
 // 		);
-
-// 		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
-
-// 		const next =
-// 			currentPage >= maxPage
-// 				? null
-// 				: `${myHost.origin}/pokemon/?offset=${nextOffset}&limit=${limit}${orderString}`;
-
-// 		const prev =
-// 			currentPage === 1
-// 				? null
-// 				: `${myHost.origin}/pokemon/?offset=${prevOffset}&limit=${limit}${orderString}`;
 
 // 		res.status(200).json({ count, next, prev, results: dataList });
 // 	} catch (error) {
@@ -143,24 +135,16 @@ const getAllPokemon = async (res, req, optionsApi, optionsUser) => {
 		offset = offset ? +offset : 0;
 		limit = limit ? +limit : 12;
 
-		const { count, nextOffset, prevOffset, dataList, maxPage, currentPage } = pagination(
+		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
+		const { count, next, prev, dataList, maxPage, currentPage } = pagination(
+			req,
 			getPokemonSlice,
 			pokemonData,
 			offset,
-			limit
+			limit,
+			`pokemon`,
+			orderString
 		);
-
-		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
-
-		const next =
-			currentPage >= maxPage
-				? null
-				: `${myHost.origin}/pokemon/?offset=${nextOffset}&limit=${limit}${orderString}`;
-
-		const prev =
-			currentPage === 1
-				? null
-				: `${myHost.origin}/pokemon/?offset=${prevOffset}&limit=${limit}${orderString}`;
 
 		res.status(200).json({ count, next, prev, results: dataList });
 	} catch (error) {

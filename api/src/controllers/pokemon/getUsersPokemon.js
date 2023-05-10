@@ -6,7 +6,7 @@ const { getPokemonSlice } = require('../../utils/pokemonSlice');
 
 const getUsersPokemon = async (req, res) => {
 	try {
-		let { offset, limit } = req.query;
+		let { offset, limit, orderby, ordertype } = req.query;
 		const myHost = getMyHost(req);
 
 		const pokemonUser = await Pokemon.findAll({
@@ -16,22 +16,22 @@ const getUsersPokemon = async (req, res) => {
 		offset = offset ? +offset : 0;
 		limit = limit ? +limit : 12;
 
-		const { count, nextOffset, prevOffset, dataList, maxPage, currentPage } = pagination(
+		let pokemonData = [...pokemonUser];
+
+		if (orderby && ordertype) {
+			pokemonData = orderPokemonList([...pokemonApiList, ...pokemonUserList], orderby, ordertype);
+		}
+		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
+
+		const { count, next, prev, dataList, maxPage, currentPage } = pagination(
+			req,
 			getPokemonSlice,
-			pokemonUser,
+			pokemonData,
 			offset,
-			limit
+			limit,
+			`pokemon/users/pokemon`,
+			orderString
 		);
-
-		const next =
-			currentPage >= maxPage
-				? null
-				: `${myHost.origin}/custom/?offset=${nextOffset}&limit=${limit}${orderString}`;
-
-		const prev =
-			currentPage === 1
-				? null
-				: `${myHost.origin}/custom/?offset=${prevOffset}&limit=${limit}${orderString}`;
 
 		res.status(200).json({ count, next, prev, results: dataList });
 	} catch (error) {

@@ -2,7 +2,7 @@ const CustomError = require('../classes/CustomError');
 const { Types, Pokemon, Pokemon_Api, User } = require('../db');
 const { getTypesFromApi } = require('../utils/getTypesFromApi');
 const { pagination } = require('../utils/pagination');
-const { POKE_API_URL, TYPE_SOURCE } = require('../utils/pokeApiUrl');
+const { POKE_API_URL, TYPE_SOURCE, POKEMON_SOURCE } = require('../utils/pokeApiUrl');
 const { getMyHost } = require('../utils/localhost');
 const { orderBy, orderTypes } = require('../utils/orderValues');
 const { orderPokemonList } = require('../utils/orderPokemonList');
@@ -12,19 +12,28 @@ const {
 	optionsApi,
 	optionsUser,
 } = require('../utils/optionToFindPokemon');
+const { getPokemonData } = require('../utils/getPokemonData');
 
-const filterByIdList = (data = [], offset = 0, limit = 12) => {
-	/**Funcion para el paginado de los pokemon de la base de datos */
+let pokemonApiList = [];
+
+/**Funcion para el paginado de los pokemon de la base de datos */
+const filterByIdSlice = (data = [], offset = 0, limit = 12) => {
 	const dataSlice = data.slice(offset, offset + limit);
 	return dataSlice;
 };
 
-const getPokemonByTypes = async (model, id, orderby = null, ordertype = null, options = {}) => {
-	/** Obtenemos los pokemos filtrados por el id del tipo y nos devolverá solo el id del los que
-	 * cumplen con la condicion, y si vienen los parametros orderby y order los ordenará.
-	 * El bucle for nos ayudará a retornar los datos completos de los pokemon de ese tipo ya que
-	 * al principio solo devuelve un solo tipo para el pokemon.
-	 */
+/** Obtenemos los pokemos filtrados por el id del tipo y nos devolverá solo el id del los que
+ * cumplen con la condicion, y si vienen los parametros orderby y order los ordenará.
+ * El bucle for nos ayudará a retornar los datos completos de los pokemon de ese tipo ya que
+ * al principio solo devuelve un solo tipo para el pokemon.
+ */
+const getPokemonByTypesDBList = async (
+	model,
+	id,
+	orderby = null,
+	ordertype = null,
+	options = {}
+) => {
 	const order = orderby && ordertype && [[orderby, ordertype]];
 
 	const pokemonByType = await model.findAll({
@@ -55,6 +64,25 @@ const getPokemonByTypes = async (model, id, orderby = null, ordertype = null, op
 	return pokemonWithType;
 };
 
+const getPokemonByTypesAPIList = (typeId, pokemonList = [], orderby, ordertype) => {
+	let filteredData = [];
+
+	for (let pokemon of pokemonList) {
+		for (let type of pokemon.Types) {
+			if (type.id === typeId) {
+				filteredData.push(pokemon);
+			}
+		}
+	}
+
+	filteredData = orderPokemonList(filteredData, orderby, ordertype);
+
+	return filteredData;
+};
+
+/**Funcion que nos permitira obtener los types de la api y agregarlos a la base de datos
+ * Retornará un arreglo de types
+ */
 const getTypes = async (req, res) => {
 	try {
 		const allTypes = await Types.findAll();
@@ -86,6 +114,79 @@ const getTypes = async (req, res) => {
 	}
 };
 
+// const typeFilterById = async (req, res) => {
+// 	try {
+// 		const { id } = req.params;
+// 		let { offset, limit, orderby, ordertype } = req.query;
+// 		const myHost = getMyHost(req);
+
+// 		if (isNaN(id)) {
+// 			throw new CustomError(404, 'Please, send a numeric id');
+// 		}
+
+// 		const foundedType = await Types.findByPk(+id);
+
+// 		if (!foundedType) {
+// 			throw new CustomError(404, 'The type id is not in the data base');
+// 		}
+
+// 		offset = offset ? +offset : 0;
+// 		limit = limit ? +limit : 12;
+
+// 		const getPokemonApiByType = await getPokemonByTypesDBList(
+// 			Pokemon_Api,
+// 			foundedType.id,
+// 			orderby,
+// 			ordertype,
+// 			optionsApi
+// 		);
+
+// 		const getPokemonUserByType = await getPokemonByTypesDBList(
+// 			Pokemon,
+// 			foundedType.id,
+// 			orderby,
+// 			ordertype,
+// 			optionsUser
+// 		);
+// 		console.log(getPokemonUserByType);
+
+// 		let listPokemonOrdered = [...getPokemonApiByType, ...getPokemonUserByType];
+
+// 		if (ordertype && orderby) {
+// 			listPokemonOrdered = orderPokemonList(listPokemonOrdered, orderby, ordertype);
+// 		}
+// 		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
+
+// 		const { count, nextOffset, prevOffset, dataList, maxPage, currentPage } = pagination(
+// 			req
+// 			filterByIdSlice,
+// 			listPokemonOrdered,
+// 			offset,
+// 			limit
+// 			`types/${id}`,
+// 			orderString
+// 		);
+
+// 		const next =
+// 			currentPage >= maxPage
+// 				? null
+// 				: `${myHost.origin}/types/${id}/?offset=${nextOffset}&limit=${limit}${orderString}`;
+
+// 		const prev =
+// 			currentPage === 1
+// 				? null
+// 				: `${myHost.origin}/types/${id}/?offset=${prevOffset}&limit=${limit}${orderString}`;
+
+// 		res
+// 			.status(200)
+// 			.json({ count, next, prev, name: foundedType.dataValues.name, results: dataList });
+// 	} catch (error) {
+// 		console.log(error);
+// 		const status = error.status || 500;
+// 		res.status(status).json({ error: error.message });
+// 	}
+// };
+
 const typeFilterById = async (req, res) => {
 	try {
 		const { id } = req.params;
@@ -105,22 +206,22 @@ const typeFilterById = async (req, res) => {
 		offset = offset ? +offset : 0;
 		limit = limit ? +limit : 12;
 
-		const getPokemonApiByType = await getPokemonByTypes(
-			Pokemon_Api,
-			foundedType.id,
-			orderby,
-			ordertype,
-			optionsApi
-		);
+		if (!pokemonApiList.length) {
+			const apiPokemon = await fetch(`${POKE_API_URL}/${POKEMON_SOURCE}/?offset=0&limit=40`);
+			const { results } = await apiPokemon.json();
 
-		const getPokemonUserByType = await getPokemonByTypes(
+			pokemonApiList = await Promise.all(results.map((pokemon) => getPokemonData(pokemon.name)));
+		}
+
+		const getPokemonUserByType = await getPokemonByTypesDBList(
 			Pokemon,
 			foundedType.id,
 			orderby,
 			ordertype,
 			optionsUser
 		);
-		console.log(getPokemonUserByType);
+
+		const getPokemonApiByType = getPokemonByTypesAPIList(+id, pokemonApiList, orderby, ordertype);
 
 		let listPokemonOrdered = [...getPokemonApiByType, ...getPokemonUserByType];
 
@@ -128,24 +229,16 @@ const typeFilterById = async (req, res) => {
 			listPokemonOrdered = orderPokemonList(listPokemonOrdered, orderby, ordertype);
 		}
 
-		const { count, nextOffset, prevOffset, dataList, maxPage, currentPage } = pagination(
-			filterByIdList,
+		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
+		const { count, next, prev, dataList, maxPage, currentPage } = pagination(
+			req,
+			filterByIdSlice,
 			listPokemonOrdered,
 			offset,
-			limit
+			limit,
+			`type${id}`,
+			orderString
 		);
-
-		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
-
-		const next =
-			currentPage >= maxPage
-				? null
-				: `${myHost.origin}/types/${id}/?offset=${nextOffset}&limit=${limit}${orderString}`;
-
-		const prev =
-			currentPage === 1
-				? null
-				: `${myHost.origin}/types/${id}/?offset=${prevOffset}&limit=${limit}${orderString}`;
 
 		res
 			.status(200)
@@ -157,64 +250,65 @@ const typeFilterById = async (req, res) => {
 	}
 };
 
-const pokemonFilterList = (data = [], offset = 0, limit = 12) => {
-	const dataSlice = data.slice(offset, offset + limit);
-	const returnedArray = dataSlice.map((pokemon) => {
-		return {
-			name: pokemon.pokemon.name,
-			url: pokemon.pokemon.url,
-		};
-	});
+/*********************FILTROS DIRECTOS DESDE LA API **************************** */
+/**Funcion que */
+// const pokemonFilterList = (data = [], offset = 0, limit = 12) => {
+// 	const dataSlice = data.slice(offset, offset + limit);
+// 	const returnedArray = dataSlice.map((pokemon) => {
+// 		return {
+// 			name: pokemon.pokemon.name,
+// 			url: pokemon.pokemon.url,
+// 		};
+// 	});
 
-	return returnedArray;
-};
+// 	return returnedArray;
+// };
+// const filterTypesApi = async (req, res) => {
+// 	try {
+// 		const { id } = req.params;
+// 		let { offset, limit } = req.query;
+// 		const myHost = getMyHost(req);
 
-const filterTypesApi = async (req, res) => {
-	try {
-		const { id } = req.params;
-		let { offset, limit } = req.query;
-		const myHost = getMyHost(req);
+// 		if (!id) {
+// 			throw CustomError(400, 'Please, send the id');
+// 		}
+// 		if (isNaN(id)) {
+// 			throw new CustomError(400, 'Ash, Id should be a number');
+// 		}
 
-		if (!id) {
-			throw CustomError(400, 'Please, send the id');
-		}
-		if (isNaN(id)) {
-			throw new CustomError(400, 'Ash, Id should be a number');
-		}
+// 		const response = await fetch(`${POKE_API_URL}/${TYPE_SOURCE}/${id}`);
+// 		const { pokemon, name } = await response.json();
 
-		const response = await fetch(`${POKE_API_URL}/${TYPE_SOURCE}/${id}`);
-		const { pokemon, name } = await response.json();
+// 		offset = offset ? +offset : 0;
+// 		limit = limit ? +limit : 12;
+// 		const { count, nextOffset, prevOffset, dataList, maxPage, currentPage } = pagination(
+// 			pokemonFilterList,
+// 			pokemon,
+// 			offset,
+// 			limit,
+// 			`types/filter-pag/${id}`,
+// 			req
+// 		);
 
-		offset = offset ? +offset : 0;
-		limit = limit ? +limit : 12;
-		const { count, nextOffset, prevOffset, dataList, maxPage, currentPage } = pagination(
-			pokemonFilterList,
-			pokemon,
-			offset,
-			limit,
-			`types/filter-pag/${id}`,
-			req
-		);
+// 		const next =
+// 			currentPage >= maxPage
+// 				? null
+// 				: `${myHost.origin}/types/${id}/?offset=${nextOffset}&limit=${limit}`;
 
-		const next =
-			currentPage >= maxPage
-				? null
-				: `${myHost.origin}/types/${id}/?offset=${nextOffset}&limit=${limit}`;
+// 		const prev =
+// 			currentPage === 1
+// 				? null
+// 				: `${myHost.origin}/types/${id}/?offset=${prevOffset}&limit=${limit}`;
 
-		const prev =
-			currentPage === 1
-				? null
-				: `${myHost.origin}/types/${id}/?offset=${prevOffset}&limit=${limit}`;
-
-		res.status(200).json({ count, next, prev, name, results: dataList });
-	} catch (error) {
-		const status = error.status || 500;
-		res.status(status).json({ error: error.message });
-	}
-};
+// 		res.status(200).json({ count, next, prev, name, results: dataList });
+// 	} catch (error) {
+// 		const status = error.status || 500;
+// 		res.status(status).json({ error: error.message });
+// 	}
+// };
 
 module.exports = {
 	getTypes,
-	filterTypesApi,
+	// filterTypesApi,
 	typeFilterById,
 };

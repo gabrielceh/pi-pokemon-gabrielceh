@@ -9,7 +9,7 @@ const getPokemonByUser = async (req, res) => {
 	/**Busca al pokemon segun el id del usuario que lo creó */
 	try {
 		const { userId } = req.params;
-		let { offset, limit } = req.query;
+		let { offset, limit, orderby, ordertype } = req.query;
 		const myHost = getMyHost(req);
 
 		const userFound = await User.findByPk(userId);
@@ -24,22 +24,22 @@ const getPokemonByUser = async (req, res) => {
 		offset = offset ? +offset : 0;
 		limit = limit ? +limit : 12;
 
-		const { count, nextOffset, prevOffset, dataList, maxPage, currentPage } = pagination(
+		let pokemonData = [...pokemonByUser];
+
+		if (orderby && ordertype) {
+			pokemonData = orderPokemonList([...pokemonApiList, ...pokemonUserList], orderby, ordertype);
+		}
+		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
+
+		const { count, next, prev, dataList, maxPage, currentPage } = pagination(
+			req,
 			getPokemonSlice,
-			pokemonByUser,
+			pokemonData,
 			offset,
-			limit
+			limit,
+			`pokemon/user/${userId}`,
+			orderString
 		);
-
-		const next =
-			currentPage >= maxPage
-				? null
-				: `${myHost.origin}/pokemon/user/${userId}/?offset=${nextOffset}&limit=${limit}${orderString}`;
-
-		const prev =
-			currentPage === 1
-				? null
-				: `${myHost.origin}/pokemon/user/${userId}/?offset=${prevOffset}&limit=${limit}${orderString}`;
 
 		res.status(200).json({ count, next, prev, results: dataList });
 	} catch (error) {
