@@ -5,7 +5,7 @@ const {
 	addPokemonAdmin,
 	getPokemon,
 	getPokemonById,
-	getCustomPokemon,
+	getUsersPokemon,
 	getPokemonByUser,
 	updatePokemon,
 	deletePokemon,
@@ -13,6 +13,7 @@ const {
 const { validatePokemonData, validateTypes } = require('../middleware/validatePokemonData');
 const { validationOrder } = require('../middleware/validationOrder');
 const { validationPagination } = require('../middleware/validationPagination');
+const verifyAuthToken = require('../middleware/verifyAuthToken');
 
 /** GET			"/"					Devuelve los pokemon, paginados y filtrados si se indica
  * GET 			"/:id"				Devuelve el pokemon por id ya sea del usuario o los originales
@@ -24,11 +25,12 @@ const { validationPagination } = require('../middleware/validationPagination');
 
 router.get('/', validationPagination, validationOrder, getPokemon);
 router.get('/:id', getPokemonById);
-router.get('/custom', validationPagination, validationOrder, getCustomPokemon);
 
-router.post('/', validatePokemonData, validateTypes, addPokemon);
+router.get('/users/pokemon', validationPagination, validationOrder, getUsersPokemon);
+
+router.post('/', verifyAuthToken, validatePokemonData, validateTypes, addPokemon);
 router.put('/', validatePokemonData, validateTypes, updatePokemon);
-router.delete('/:id', deletePokemon);
+router.delete('/:id', verifyAuthToken, deletePokemon);
 
 router.get('/user/:userId', validationPagination, getPokemonByUser);
 

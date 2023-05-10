@@ -6,7 +6,7 @@ const URL_BASE = 'https://pokeapi.co/api/v2';
 
 async function getAllPokemon() {
 	try {
-		let nextUrl = `${URL_BASE}/pokemon/?offset=1280&limit=1`;
+		let nextUrl = `${URL_BASE}/pokemon/?offset=0&limit=100`;
 		const pokemonList = [];
 		// while (nextUrl) {
 		const response = await fetch(nextUrl);
@@ -28,10 +28,17 @@ async function getPokemonData(pokemonName) {
 		stats[stat.stat.name] = stat.base_stat;
 	}
 
-	const typesId = data.types.map((pokType) => {
-		let id = pokType.type.url.split('/').at(-2);
-		return +id;
-	});
+	// const typesId = data.types.map((pokType) => {
+	// 	let id = pokType.type.url.split('/').at(-2);
+	// 	return +id;
+	// });
+
+	let types = [];
+
+	for (let type of data.types) {
+		let id = type.type.url.split('/').at(-2);
+		types.push(+id);
+	}
 
 	const pokemon = {
 		id: data.id,
@@ -40,9 +47,9 @@ async function getPokemonData(pokemonName) {
 		...stats,
 		weight: data.weight,
 		height: data.height,
-		types: [...typesId],
+		types: types,
 	};
-	console.log('add:' + pokemon.name);
+	console.log('add:' + pokemon.name, 'types:', types);
 
 	return pokemon;
 }
@@ -54,7 +61,7 @@ const addPokemonToDataBase = async () => {
 			allPokemon.map((pokemon) => getPokemonData(pokemon.name))
 		);
 
-		const filePath = path.join(__dirname, '..', 'data', 'pokemonList14.json');
+		const filePath = path.join(__dirname, '..', 'data', 'pokemonList.json');
 
 		const pokemonToSave = JSON.stringify(pokemonDataList);
 

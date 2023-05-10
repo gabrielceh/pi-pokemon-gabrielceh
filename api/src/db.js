@@ -3,6 +3,11 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
+// const BlacklistModel = require('./models/BlackList');
+// const PokemonApiModel = require('./models/Pokemon-Api');
+// const PokemonModel = require('./models/Pokemon');
+// const TypesModel = require('./models/Types');
+// const UserModel = require('./models/User');
 
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pokemon`, {
 	logging: false, // set to console.log to see the raw SQL queries
@@ -28,13 +33,13 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Pokemon, Types, Pokemon_Api, User } = sequelize.models;
+const { Pokemon, Types, Pokemon_Api, User, Blacklist } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
 
-Pokemon.belongsToMany(Types, { through: 'pokemon-types' });
-Types.belongsToMany(Pokemon, { through: 'pokemon-types' });
+Pokemon.belongsToMany(Types, { through: 'pokemon_types' });
+Types.belongsToMany(Pokemon, { through: 'pokemon_types' });
 
 Pokemon_Api.belongsToMany(Types, { through: 'pokemon_api_types' });
 Types.belongsToMany(Pokemon_Api, { through: 'pokemon_api_types' });
@@ -52,5 +57,6 @@ module.exports = {
 	Pokemon,
 	Pokemon_Api,
 	User,
+	Blacklist,
 	conn: sequelize, // para importart la conexión { conn } = require('./db.js');
 };

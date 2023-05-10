@@ -19,6 +19,7 @@ const attributes = [
 	'weight',
 	'height',
 ];
+
 const includeTypes = {
 	model: Types,
 	attributes: ['id', 'name'],

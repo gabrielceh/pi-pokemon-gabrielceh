@@ -14,7 +14,6 @@ const validatePokemonData = (req, res, next) => {
 			types,
 			height,
 			weight,
-			userId,
 		} = req.body;
 
 		if (
@@ -58,10 +57,6 @@ const validatePokemonData = (req, res, next) => {
 
 		if ((height && isNaN(height)) || (weight && isNaN(weight))) {
 			throw new CustomError(400, 'height or weight should be numbers');
-		}
-
-		if (!userId) {
-			throw new CustomError(400, 'Please, send the user id');
 		}
 
 		next();
