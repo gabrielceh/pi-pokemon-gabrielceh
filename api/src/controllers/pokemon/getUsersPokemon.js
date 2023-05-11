@@ -1,6 +1,7 @@
 const { Pokemon } = require('../../db');
 const { getMyHost } = require('../../utils/localhost');
 const { optionsUser } = require('../../utils/optionToFindPokemon');
+const { orderPokemonList } = require('../../utils/orderPokemonList');
 const { pagination } = require('../../utils/pagination');
 const { getPokemonSlice } = require('../../utils/pokemonSlice');
 
@@ -19,7 +20,7 @@ const getUsersPokemon = async (req, res) => {
 		let pokemonData = [...pokemonUser];
 
 		if (orderby && ordertype) {
-			pokemonData = orderPokemonList([...pokemonApiList, ...pokemonUserList], orderby, ordertype);
+			pokemonData = orderPokemonList([...pokemonData], orderby, ordertype);
 		}
 		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
 

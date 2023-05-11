@@ -29,26 +29,50 @@ module.exports = (sequelize) => {
 		hp: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			validate: {
+				min: 1,
+				max: 255,
+			},
 		},
 		attack: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			validate: {
+				min: 5,
+				max: 190,
+			},
 		},
 		defense: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			validate: {
+				min: 20,
+				max: 160,
+			},
 		},
 		special_attack: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			validate: {
+				min: 15,
+				max: 190,
+			},
 		},
 		special_defense: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			validate: {
+				min: 20,
+				max: 250,
+			},
 		},
 		speed: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			validate: {
+				min: 5,
+				max: 136,
+			},
 		},
 		height: {
 			type: DataTypes.FLOAT,

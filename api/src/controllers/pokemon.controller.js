@@ -13,6 +13,7 @@ const { getPokemonByUser } = require('./pokemon/getPokemonByUser');
 const { addPokemon } = require('./pokemon/addPokemon');
 const { updatePokemon } = require('./pokemon/updatePokemon');
 const { deletePokemon } = require('./pokemon/deletePokemon');
+const { getApiPokemon } = require('./pokemon/getApiPokemon');
 
 const addPokemonAdmin = async (req, res) => {
 	/**Añade los pokemon que estan en el archivo PokDataBase a la base de datos */
@@ -69,6 +70,7 @@ const addPokemonAdmin = async (req, res) => {
 module.exports = {
 	addPokemon,
 	addPokemonAdmin,
+	getApiPokemon,
 	getPokemon,
 	getPokemonById,
 	getUsersPokemon,

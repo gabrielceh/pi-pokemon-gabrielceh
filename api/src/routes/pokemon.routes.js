@@ -9,6 +9,7 @@ const {
 	getPokemonByUser,
 	updatePokemon,
 	deletePokemon,
+	getApiPokemon,
 } = require('../controllers/pokemon.controller');
 const { validatePokemonData, validateTypes } = require('../middleware/validatePokemonData');
 const { validationOrder } = require('../middleware/validationOrder');
@@ -27,6 +28,7 @@ router.get('/', validationPagination, validationOrder, getPokemon);
 router.get('/:id', getPokemonById);
 
 router.get('/users/pokemon', validationPagination, validationOrder, getUsersPokemon);
+router.get('/api/pokemon', validationPagination, validationOrder, getApiPokemon);
 
 router.post('/', verifyAuthToken, validatePokemonData, validateTypes, addPokemon);
 router.put('/', validatePokemonData, validateTypes, updatePokemon);

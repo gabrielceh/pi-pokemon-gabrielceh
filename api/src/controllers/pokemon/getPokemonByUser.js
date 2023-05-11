@@ -2,6 +2,7 @@ const CustomError = require('../../classes/CustomError');
 const { User, Pokemon } = require('../../db');
 const { getMyHost } = require('../../utils/localhost');
 const { optionsUser } = require('../../utils/optionToFindPokemon');
+const { orderPokemonList } = require('../../utils/orderPokemonList');
 const { pagination } = require('../../utils/pagination');
 const { getPokemonSlice } = require('../../utils/pokemonSlice');
 
@@ -27,7 +28,7 @@ const getPokemonByUser = async (req, res) => {
 		let pokemonData = [...pokemonByUser];
 
 		if (orderby && ordertype) {
-			pokemonData = orderPokemonList([...pokemonApiList, ...pokemonUserList], orderby, ordertype);
+			pokemonData = orderPokemonList([...pokemonByUser], orderby, ordertype);
 		}
 		const orderString = orderby && ordertype ? `&orderby=${orderby}&ordertype=${ordertype}` : '';
 
@@ -43,6 +44,7 @@ const getPokemonByUser = async (req, res) => {
 
 		res.status(200).json({ count, next, prev, results: dataList });
 	} catch (error) {
+		console.log(error);
 		const status = error.status || 500;
 		res.status(status).json({ error: error.message });
 	}

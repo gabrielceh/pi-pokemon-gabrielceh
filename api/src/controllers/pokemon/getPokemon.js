@@ -7,6 +7,10 @@ const { pagination } = require('../../utils/pagination');
 const { getPokemonSlice } = require('../../utils/pokemonSlice');
 const { POKE_API_URL, POKEMON_SOURCE } = require('../../utils/pokeApiUrl');
 const { getPokemonData } = require('../../utils/getPokemonData');
+const { orderPokemonList } = require('../../utils/orderPokemonList');
+
+let pokemonApiList = [];
+let pokemonUserList = [];
 
 // const getPokemonByName = async (res, name, optionsApi, optionsUser) => {
 // 	try {
@@ -50,8 +54,13 @@ const { getPokemonData } = require('../../utils/getPokemonData');
 // 		let { offset, limit, orderby, ordertype } = req.query;
 // 		const myHost = getMyHost(req);
 
-// 		const pokemonApiList = await Pokemon_Api.findAll(optionsApi);
-// 		const pokemonUserList = await Pokemon.findAll(optionsUser);
+//		if(!pokemonApiList.length){
+//			pokemonApiList = await Pokemon_Api.findAll(optionsApi);
+//		}
+//		(pokemonUserList.length){
+//			pokemonUserList = await Pokemon.findAll(optionsUser);
+
+//		}
 
 // 		let pokemonData = [...pokemonApiList, ...pokemonUserList];
 
@@ -117,14 +126,16 @@ const getAllPokemon = async (res, req, optionsApi, optionsUser) => {
 		let { offset, limit, orderby, ordertype } = req.query;
 		const myHost = getMyHost(req);
 
-		const apiPokemon = await fetch(`${POKE_API_URL}/${POKEMON_SOURCE}/?offset=0&limit=40`);
-		const { results } = await apiPokemon.json();
+		if (!pokemonApiList.length) {
+			const apiPokemon = await fetch(`${POKE_API_URL}/${POKEMON_SOURCE}/?offset=0&limit=40`);
+			const { results } = await apiPokemon.json();
 
-		const pokemonApiList = await Promise.all(
-			results.map((pokemon) => getPokemonData(pokemon.name))
-		);
+			pokemonApiList = await Promise.all(results.map((pokemon) => getPokemonData(pokemon.name)));
+		}
 
-		const pokemonUserList = await Pokemon.findAll(optionsUser);
+		if (!pokemonUserList.length) {
+			pokemonUserList = await Pokemon.findAll(optionsUser);
+		}
 
 		let pokemonData = [...pokemonApiList, ...pokemonUserList];
 
@@ -142,7 +153,7 @@ const getAllPokemon = async (res, req, optionsApi, optionsUser) => {
 			pokemonData,
 			offset,
 			limit,
-			`pokemon`,
+			`pokemon-api/pokemon`,
 			orderString
 		);
 

@@ -10,6 +10,9 @@ import { base, endpoints } from '../utils/endpoints';
 
 import Pagination from '../components/Pagination/Pagination';
 import Cards from '../components/Cards/Cards';
+import OrderSelect from '../components/OrderSelect/OrderSelect';
+import FilterSelect from '../components/FilterSelect/FilterSelect';
+import OriginSelect from '../components/OriginSelect/OriginSelect';
 
 function Home() {
 	const [data, setData] = useState([]);
@@ -46,10 +49,28 @@ function Home() {
 		return () => {
 			dispatch(apiErrorReset());
 		};
-	}, []);
+	}, [endPointPag]);
 
-	const handleClick = () => {
+	const handleLogout = () => {
 		dispatch(logout());
+	};
+
+	const handleOrder = (orderby, ordertype) => {
+		console.log(orderby);
+		setOrderPag({
+			orderby,
+			ordertype,
+		});
+		setCurrentPage(1);
+		const pag = `?offset=0&limit=${limit}`;
+		fetchPokemonList(`${base}/${endPointPag}/${pag}&orderby=${orderby}&ordertype=${ordertype}`);
+	};
+
+	const resetOrder = () => {
+		setOrderPag(null);
+		setCurrentPage(1);
+		const pag = `?offset=0&limit=${limit}`;
+		fetchPokemonList(`${base}/${endPointPag}/${pag}`);
 	};
 
 	return (
@@ -65,9 +86,25 @@ function Home() {
 				<div>
 					<p>{user.user.userName}</p>
 					<p>{user.user.email}</p>
-					<button onClick={handleClick}>logout</button>
+					<button onClick={handleLogout}>logout</button>
 				</div>
 			)}
+			<OrderSelect
+				handleOrder={handleOrder}
+				resetOrder={resetOrder}
+				orderPag={orderPag}
+			/>
+			<FilterSelect
+				setEnpoint={setEndPontPag}
+				setCurrentPage={setCurrentPage}
+				setOrderPag={setOrderPag}
+			/>
+
+			<OriginSelect
+				setCurrentPage={setCurrentPage}
+				setEnpoint={setEndPontPag}
+				setOrderPag={setOrderPag}
+			/>
 			{loading ? (
 				<p>loading</p>
 			) : (

@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
 import ButtonPagination from './ButtonPagination';
 import { base } from '../../utils/endpoints';
 
@@ -14,7 +13,6 @@ function Pagination({
 	setCurrentPage,
 	endpoint = {},
 	orderPag = null,
-	results = [],
 }) {
 	const totalPages = Math.ceil(count / limit);
 
@@ -53,6 +51,10 @@ function Pagination({
 	return (
 		<div className='pagination'>
 			<ButtonPagination
+				handleClick={() => handleClick(1)}
+				label='First page'
+			/>
+			<ButtonPagination
 				handleClick={() => handleClick(currentPage - 1)}
 				disabled={prev ? false : true}
 				label={'Anterior'}
@@ -62,6 +64,10 @@ function Pagination({
 				handleClick={() => handleClick(currentPage + 1)}
 				disabled={next ? false : true}
 				label={'Siguiente'}
+			/>
+			<ButtonPagination
+				handleClick={() => handleClick(totalPages)}
+				label='Last Page'
 			/>
 		</div>
 	);
