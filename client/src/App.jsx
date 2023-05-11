@@ -21,7 +21,6 @@ function App() {
 		const auth_token = localStorage.getItem('auth_token');
 		if (auth_token) {
 			const decode = jwt_decode(auth_token);
-			console.log(decode);
 			if (decode.exp < Date.now() / 1000) {
 				localStorage.removeItem(auth_token);
 				dispatch(logout());
@@ -30,7 +29,7 @@ function App() {
 			dispatch(
 				setUserByLocal({
 					user: {
-						email: decode.email,
+						email: decode.userEmail,
 						userId: decode.userId,
 						userName: decode.userName,
 					},
