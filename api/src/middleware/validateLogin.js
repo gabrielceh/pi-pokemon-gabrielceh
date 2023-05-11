@@ -3,10 +3,10 @@ const { EMAIL_REGEX, PASSWORD_REGEX } = require('../utils/regex');
 
 const validateRegister = (req, res, next) => {
 	try {
-		const { email, password } = req.body;
+		const { email, password, userName } = req.body;
 
-		if (!email || !password) {
-			throw new CustomError(400, 'Please, send email and password');
+		if (!email || !password || !userName) {
+			throw new CustomError(400, 'Please, send email, password and userName');
 		}
 
 		if (!EMAIL_REGEX.test(email)) {

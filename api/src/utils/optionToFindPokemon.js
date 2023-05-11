@@ -37,7 +37,7 @@ const optionsUser = {
 		includeTypes,
 		{
 			model: User,
-			attributes: ['email'],
+			attributes: ['userName', 'userId'],
 			through: {
 				attributes: [],
 			},

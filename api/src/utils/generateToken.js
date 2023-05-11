@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET, NODE_ENV } = process.env;
 
-const generateToken = (userId, userEmail, res) => {
+const generateToken = (userId, userEmail, userName, res) => {
 	try {
 		const expiresIn = 60 * 60 * 24 * 7; // 7 dias
-		const token = jwt.sign({ userId, userEmail }, JWT_SECRET, { expiresIn: expiresIn });
+		const token = jwt.sign({ userId, userEmail, userName }, JWT_SECRET, { expiresIn: expiresIn });
 
 		res.cookie('auth_token', token, {
 			httpOnly: true, // La cookie solo puede ser leída por el servidor

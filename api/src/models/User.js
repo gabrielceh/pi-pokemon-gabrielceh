@@ -23,6 +23,11 @@ module.exports = (sequelize) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 			},
+			userName: {
+				type: DataTypes.STRING(40),
+				allowNull: false,
+				unique: true,
+			},
 		},
 		{ timestamps: false }
 	);

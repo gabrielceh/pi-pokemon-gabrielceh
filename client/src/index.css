@@ -1,1 +1,30 @@
+@font-face {
+	font-family: 'McLaren';
+	src: url('./assets/fonts/McLaren-Regular.ttf');
+}
+@font-face {
+	font-family: 'Varta';
+	src: url('./assets/fonts/Varta-VariableFont_wght.ttf');
+}
 
+:root {
+	font-size: 16px;
+}
+
+body,
+html {
+	font-family: 'Varta', sans-serif;
+}
+
+* {
+	font-family: 'Varta', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'McLaren', sans-serif;
+}

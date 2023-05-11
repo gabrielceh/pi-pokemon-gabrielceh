@@ -17,8 +17,6 @@ const pagination = (
 	const nextOffset = offset + limit;
 	const prevOffset = offset - limit;
 
-	console.log(count, maxPage, currentPage, nextOffset, prevOffset);
-
 	const dataList = dataFilter(data, +offset, +limit);
 
 	const next =
@@ -30,8 +28,6 @@ const pagination = (
 		currentPage === 1
 			? null
 			: `${myHost.origin}/${route}/?offset=${prevOffset}&limit=${limit}${orderString}`;
-
-	console.log(currentPage, maxPage);
 
 	return { count, next, prev, dataList, maxPage, currentPage };
 };

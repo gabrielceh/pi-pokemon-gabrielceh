@@ -7,9 +7,7 @@ const getBlackList = async (token) => {
 };
 
 const saveTokenInBlackList = async (blacklist) => {
-	console.log(blacklist);
 	const tokens = [...blacklist].map((token) => ({ token }));
-	console.log(tokens);
 	await Blacklist.bulkCreate(tokens, {
 		updateOnDuplicate: ['updatedAt'],
 	});

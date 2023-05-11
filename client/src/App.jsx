@@ -1,10 +1,48 @@
+import { useEffect } from 'react';
+import AppRouter from './routes/AppRouter';
+// import Cookies from 'js-cookie';
+/**
+ * En el archivo vote.config añadir lo siguiente  para que funcione jwt-decode
+ 	optimizeDeps: {
+		exclude: ['js-big-decimal'],
+	},
+	*/
+import jwt_decode from 'jwt-decode';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout, setUserByLocal } from './redux/actions/user.action';
+
 function App() {
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user);
+
+	useEffect(() => {
+		if (user.access) return;
+
+		const auth_token = localStorage.getItem('auth_token');
+		if (auth_token) {
+			const decode = jwt_decode(auth_token);
+			console.log(decode);
+			if (decode.exp < Date.now() / 1000) {
+				localStorage.removeItem(auth_token);
+				dispatch(logout());
+				return;
+			}
+			dispatch(
+				setUserByLocal({
+					user: {
+						email: decode.email,
+						userId: decode.userId,
+						userName: decode.userName,
+					},
+					authToken: auth_token,
+				})
+			);
+		}
+	}, [user.access]);
+
 	return (
 		<>
-			<h1>hola</h1>
-			<h2>hola</h2>
-			<h3>hola</h3>
-			<h4>hola</h4>
+			<AppRouter />
 		</>
 	);
 }

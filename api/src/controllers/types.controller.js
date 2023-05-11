@@ -236,7 +236,7 @@ const typeFilterById = async (req, res) => {
 			listPokemonOrdered,
 			offset,
 			limit,
-			`type${id}`,
+			`types/${id}`,
 			orderString
 		);
 
