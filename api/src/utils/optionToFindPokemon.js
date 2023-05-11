@@ -16,6 +16,7 @@ const attributes = [
 	'defense',
 	'special_attack',
 	'special_defense',
+	'speed',
 	'weight',
 	'height',
 ];

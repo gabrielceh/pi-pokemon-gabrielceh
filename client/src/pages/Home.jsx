@@ -1,9 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { ROUTES_NAMES } from '../utils/routes_name';
-import { logout } from '../redux/actions/user.action';
 import { loaderOn, loaderOff } from '../redux/actions/loading.actions';
 import { apiErrorSet, apiErrorReset } from '../redux/actions/apieError.actions';
 import { base, endpoints } from '../utils/endpoints';
@@ -25,7 +23,6 @@ function Home() {
 
 	const limit = 12;
 
-	const user = useSelector((state) => state.user);
 	const loading = useSelector((state) => state.loading);
 	const dispatch = useDispatch();
 
@@ -51,10 +48,6 @@ function Home() {
 		};
 	}, [endPointPag]);
 
-	const handleLogout = () => {
-		dispatch(logout());
-	};
-
 	const handleOrder = (orderby, ordertype) => {
 		console.log(orderby);
 		setOrderPag({
@@ -76,19 +69,7 @@ function Home() {
 	return (
 		<div>
 			<h2>Home</h2>
-			{!user.access && (
-				<>
-					<Link to={ROUTES_NAMES.LOGIN}>LOGIN</Link> |{' '}
-					<Link to={ROUTES_NAMES.REGISTER}>REGISTER</Link>
-				</>
-			)}
-			{user.access && (
-				<div>
-					<p>{user.user.userName}</p>
-					<p>{user.user.email}</p>
-					<button onClick={handleLogout}>logout</button>
-				</div>
-			)}
+
 			<OrderSelect
 				handleOrder={handleOrder}
 				resetOrder={resetOrder}

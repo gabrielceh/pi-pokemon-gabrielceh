@@ -1,5 +1,8 @@
 /* eslint-disable react/prop-types */
 
+import { Link } from 'react-router-dom';
+import { ROUTES_NAMES } from '../../utils/routes_name';
+
 function Card({ pokemon = {} }) {
 	let {
 		id,
@@ -13,7 +16,7 @@ function Card({ pokemon = {} }) {
 	return (
 		<div>
 			{pokemon.id && (
-				<>
+				<Link to={`${ROUTES_NAMES.DETAIL}/${id}`}>
 					<h3>{name}</h3>
 
 					<ul>
@@ -22,7 +25,7 @@ function Card({ pokemon = {} }) {
 					</ul>
 
 					{user && <p>USER: {user.userName}</p>}
-				</>
+				</Link>
 			)}
 		</div>
 	);

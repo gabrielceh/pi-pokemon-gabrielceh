@@ -10,7 +10,6 @@ const { getPokemonData } = require('../../utils/getPokemonData');
 const { orderPokemonList } = require('../../utils/orderPokemonList');
 
 let pokemonApiList = [];
-let pokemonUserList = [];
 
 // const getPokemonByName = async (res, name, optionsApi, optionsUser) => {
 // 	try {
@@ -57,10 +56,8 @@ let pokemonUserList = [];
 //		if(!pokemonApiList.length){
 //			pokemonApiList = await Pokemon_Api.findAll(optionsApi);
 //		}
-//		(pokemonUserList.length){
-//			pokemonUserList = await Pokemon.findAll(optionsUser);
 
-//		}
+//			const pokemonUserList = await Pokemon.findAll(optionsUser);
 
 // 		let pokemonData = [...pokemonApiList, ...pokemonUserList];
 
@@ -132,10 +129,7 @@ const getAllPokemon = async (res, req, optionsApi, optionsUser) => {
 
 			pokemonApiList = await Promise.all(results.map((pokemon) => getPokemonData(pokemon.name)));
 		}
-
-		if (!pokemonUserList.length) {
-			pokemonUserList = await Pokemon.findAll(optionsUser);
-		}
+		const pokemonUserList = await Pokemon.findAll(optionsUser);
 
 		let pokemonData = [...pokemonApiList, ...pokemonUserList];
 

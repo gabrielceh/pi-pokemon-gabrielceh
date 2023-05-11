@@ -6,6 +6,7 @@ import { apiErrorReset } from '../redux/actions/apieError.actions';
 import { ROUTES_NAMES } from '../utils/routes_name';
 import { useEffect, useState } from 'react';
 import { validateLoginForm } from '../utils/validateForms';
+import InputForm from '../components/Inputs/InputForm';
 
 const initialState = {
 	email: '',
@@ -70,33 +71,26 @@ function Login() {
 	return (
 		<div>
 			<h2>Login</h2>
-			<Link to={ROUTES_NAMES.HOME}>Home</Link> | <Link to={ROUTES_NAMES.REGISTER}>REGISTER</Link>
+			<Link to={ROUTES_NAMES.REGISTER}>REGISTER</Link>
 			<form
 				action=''
 				onSubmit={handleSubmit}>
-				<div>
-					<label htmlFor='email'>Email:</label>
-					<input
-						type='email'
-						value={form.email}
-						name='email'
-						id='email'
-						onChange={handleInputChange}
-					/>
-					{errors.email ? <span>{errors.email}</span> : <span> </span>}
-				</div>
-
-				<div>
-					<label htmlFor='password'>Password:</label>
-					<input
-						type='password'
-						value={form.password}
-						name='password'
-						id='password'
-						onChange={handleInputChange}
-					/>
-					{errors.password ? <span>{errors.password}</span> : <span> </span>}
-				</div>
+				<InputForm
+					label='Email'
+					type='email'
+					name='email'
+					value={form.email}
+					error={errors.email}
+					handleInput={handleInputChange}
+				/>
+				<InputForm
+					label='Password'
+					type='password'
+					name='password'
+					value={form.password}
+					error={errors.password}
+					handleInput={handleInputChange}
+				/>
 
 				<button
 					disabled={loading}

@@ -6,4 +6,5 @@ export const ROUTES_NAMES = Object.freeze({
 	PROFILE: '/profile/',
 	ABOUT: '/about',
 	DETAIL: '/detail',
+	ADD: '/add',
 });

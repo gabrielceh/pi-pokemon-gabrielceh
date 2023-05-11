@@ -2,13 +2,12 @@ import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import MainLayout from '../components/MainLayout/MainLayout';
 
-function PublicRoutes() {
+function ProtectedRouted() {
 	const user = useSelector((state) => state.user);
 
-	if (user.access & user.user) {
+	if (!user.access || !user.user) {
 		return <Navigate to='/home' />;
 	}
-
 	return (
 		<MainLayout>
 			<Outlet />
@@ -16,4 +15,4 @@ function PublicRoutes() {
 	);
 }
 
-export default PublicRoutes;
+export default ProtectedRouted;

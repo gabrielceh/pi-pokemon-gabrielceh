@@ -7,6 +7,7 @@ import { apiErrorReset } from '../redux/actions/apieError.actions';
 import { resetUser } from '../redux/actions/user.action';
 import { ROUTES_NAMES } from '../utils/routes_name';
 import { validateRegisterForm } from '../utils/validateForms';
+import InputForm from '../components/Inputs/InputForm';
 
 const initialState = {
 	email: '',
@@ -75,56 +76,44 @@ function Register() {
 	return (
 		<div>
 			<h2>Register</h2>
-			<Link to={ROUTES_NAMES.HOME}>Home</Link> | <Link to={ROUTES_NAMES.LOGIN}>Login</Link>
+			<Link to={ROUTES_NAMES.LOGIN}>Login</Link>
 			<form
 				action=''
 				onSubmit={handleSubmit}>
-				<div>
-					<label htmlFor='email'>Email:</label>
-					<input
-						type='email'
-						value={form.email}
-						name='email'
-						id='email'
-						onChange={handleInputChange}
-					/>
-					{errors.email ? <span>{errors.email}</span> : <span>{''}</span>}
-				</div>
+				<InputForm
+					label='Email'
+					type='email'
+					name='email'
+					value={form.email}
+					handleInput={handleInputChange}
+					error={errors.email}
+				/>
 
-				<div>
-					<label htmlFor='userName'>User name:</label>
-					<input
-						type='text'
-						value={form.userName}
-						name='userName'
-						id='userName'
-						onChange={handleInputChange}
-					/>
-					{errors.userName ? <span>{errors.userName}</span> : <span>{''}</span>}
-				</div>
+				<InputForm
+					label='User name'
+					type='text'
+					name='userName'
+					value={form.userName}
+					handleInput={handleInputChange}
+					error={errors.userName}
+				/>
 
-				<div>
-					<label htmlFor='password'>Password:</label>
-					<input
-						type='password'
-						value={form.password}
-						name='password'
-						id='password'
-						onChange={handleInputChange}
-					/>
-					{errors.password ? <span>{errors.password}</span> : <span>{''}</span>}
-				</div>
-				<div>
-					<label htmlFor='repeatPassword'>Repeat Password:</label>
-					<input
-						type='password'
-						value={form.repeatPassword}
-						name='repeatPassword'
-						id='repeatPassword'
-						onChange={handleInputChange}
-					/>
-					{errors.repeatPassword ? <span>{errors.repeatPassword}</span> : <span>{''}</span>}
-				</div>
+				<InputForm
+					label='Password'
+					type='password'
+					name='password'
+					value={form.password}
+					handleInput={handleInputChange}
+					error={errors.password}
+				/>
+				<InputForm
+					label='Repeat password'
+					type='password'
+					name='repeatPassword'
+					value={form.repeatPassword}
+					handleInput={handleInputChange}
+					error={errors.repeatPassword}
+				/>
 
 				<button
 					disabled={loading}
