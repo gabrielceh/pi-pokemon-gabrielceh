@@ -3,10 +3,13 @@ import InputForm from '../components/Inputs/InputForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiErrorReset } from '../redux/actions/apieError.actions';
 import { getTypes } from '../redux/actions/types.actions';
+import { createUserPokemon, resetSuccessPokemonUser } from '../redux/actions/pokemonUser.action';
+import { getUrlFromImage } from '../utils/getUrlFromImage';
+import { getImageToShow } from '../utils/showImage';
+import { imageTypes, validateCreateForm } from '../utils/validateForms';
 
 const initialForm = {
 	name: '',
-	image: '',
 	hp: '',
 	attack: '',
 	defense: '',
@@ -19,20 +22,39 @@ const initialForm = {
 };
 function Add() {
 	const [form, setForm] = useState(initialForm);
+	const [base64ToShow, setBase64ToShow] = useState(null);
 	const [errors, setErrors] = useState({});
+	const formImage = document.getElementById('formImage');
 
 	const dispatch = useDispatch();
-	const user = useSelector((state) => state.user);
 	const typesPokemon = useSelector((state) => state.typesPokemon);
+	const pokemonUser = useSelector((state) => state.pokemonUser);
+	const apiError = useSelector((state) => state.apiError);
 	const loading = useSelector((state) => state.loading);
+
+	useEffect(() => {
+		console.log(apiError);
+		if (!apiError.error) {
+			return;
+		}
+		window.alert(apiError?.error);
+	}, [apiError]);
+
+	useEffect(() => {
+		if (!pokemonUser?.success) {
+			return;
+		}
+		console.log(pokemonUser.success);
+		dispatch(resetSuccessPokemonUser());
+	}, [pokemonUser]);
 
 	useEffect(() => {
 		if (!typesPokemon.length) {
 			dispatch(getTypes());
 		}
-		console.log(typesPokemon);
 		return () => {
 			dispatch(apiErrorReset());
+			dispatch(resetSuccessPokemonUser());
 		};
 	}, []);
 
@@ -43,6 +65,12 @@ function Add() {
 			...form,
 			[nameInput]: value,
 		});
+		setErrors(
+			validateCreateForm({
+				...form,
+				[nameInput]: value,
+			})
+		);
 	};
 
 	const handleMultipleSelect = (event) => {
@@ -63,12 +91,54 @@ function Add() {
 			...form,
 			types: value,
 		});
+		setErrors(
+			validateCreateForm({
+				...form,
+				types: value,
+			})
+		);
 	};
 
-	const handleSubmit = (event) => {
+	const handleImageChange = async (event) => {
+		if (imageTypes(event.target.files[0].type) === false) {
+			setErrors({
+				...form,
+				image: 'Invalid format. Only: .png, .jpg, .svg, .webp',
+			});
+			formImage.value = '';
+			return setBase64ToShow(null);
+		}
+		const url = await getImageToShow(event.target.files[0]);
+		setBase64ToShow(url);
+
+		setErrors(
+			validateCreateForm({
+				...form,
+				...errors,
+				image: event.target.files[0],
+			})
+		);
+	};
+
+	const handleOnCloseImage = (event) => {
+		event.preventDefault();
+		formImage.value = '';
+		setBase64ToShow(null);
+	};
+
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		console.log(form);
+		for (let error in errors) {
+			if (errors[error]) return window.alert(`${errors[error]}`);
+		}
+
+		let getUrl = '';
+		if (formImage.files.length) {
+			getUrl = await getUrlFromImage(base64ToShow);
+		}
+
+		dispatch(createUserPokemon({ ...form, image: getUrl }));
 	};
 
 	return (
@@ -84,14 +154,29 @@ function Add() {
 				handleInput={handleInputChange}
 				error={errors.name}
 			/>
-			<InputForm
-				label='My Pókemon Image'
-				type='url'
-				name='image'
-				value={form.image}
-				handleInput={handleInputChange}
-				error={errors.image}
-			/>
+
+			<div>
+				<label htmlFor='formImage'>My Pokémon image</label>
+				<input
+					type='file'
+					name='formImage'
+					id='formImage'
+					onChange={handleImageChange}
+				/>
+				{base64ToShow && (
+					<>
+						<button onClick={handleOnCloseImage}>x</button>
+						<img
+							src={base64ToShow}
+							alt={form.name}
+							width={100}
+							height={100}
+						/>
+					</>
+				)}
+				{errors.image ? <span>{errors.image}</span> : <span> </span>}
+			</div>
+
 			<InputForm
 				label='My Pókemon HP'
 				type='number'
@@ -151,7 +236,7 @@ function Add() {
 			<InputForm
 				label='My Pókemon Weight'
 				type='number'
-				name='Weight'
+				name='weight'
 				value={form.weight}
 				handleInput={handleInputChange}
 				error={errors.weight}
@@ -160,24 +245,27 @@ function Add() {
 			{loading ? (
 				<div>Loading</div>
 			) : (
-				<select
-					name='types'
-					id='types'
-					value={form.types}
-					onChange={handleMultipleSelect}
-					multiple={true}>
-					{typesPokemon.length &&
-						typesPokemon.map((type) => (
-							<option
-								key={type.id}
-								value={type.id}>
-								{type.name}
-							</option>
-						))}
-				</select>
+				<div>
+					<select
+						name='types'
+						id='types'
+						value={form.types}
+						onChange={handleMultipleSelect}
+						multiple={true}>
+						{typesPokemon.length &&
+							typesPokemon.map((type) => (
+								<option
+									key={type.id}
+									value={type.id}>
+									{type.name}
+								</option>
+							))}
+					</select>
+					{errors.types ? <span>{errors.types}</span> : <span> </span>}
+				</div>
 			)}
 
-			<button>send</button>
+			<button disabled={loading}>send</button>
 		</form>
 	);
 }

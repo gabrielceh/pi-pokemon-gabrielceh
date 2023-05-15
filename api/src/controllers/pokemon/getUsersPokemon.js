@@ -30,7 +30,7 @@ const getUsersPokemon = async (req, res) => {
 			pokemonData,
 			offset,
 			limit,
-			`pokemon/users/pokemon`,
+			`pokemon-api/pokemon/users/pokemon`,
 			orderString
 		);
 

@@ -88,25 +88,53 @@ let pokemonApiList = [];
 
 const getPokemonByName = async (res, name, optionsApi, optionsUser) => {
 	try {
-		const responseApi = await getPokemonData(name);
-		console.log(responseApi);
-
-		const pokemonUserFinded = await Pokemon.findAll({
+		const pokemonUserFinded = await Pokemon.findOne({
 			where: {
-				name: {
-					[Op.like]: `%${name}%`,
-				},
+				name: name.toLowerCase(),
 			},
 			...optionsUser,
 		});
 
-		if (!pokemonUserFinded.length && responseApi.status >= 400) {
+		if (pokemonUserFinded) {
+			return res.status(200).json(pokemonUserFinded);
+		}
+
+		const responseApi = await fetch(`${POKE_API_URL}/${POKEMON_SOURCE}/${name}`);
+
+		if (responseApi.status >= 400) {
 			throw new CustomError(400, `Pokemon ${name} not found`);
 		}
 
-		const pokemonFinded = [responseApi, ...pokemonUserFinded];
+		const data = await responseApi.json();
 
-		return res.status(200).json(pokemonFinded);
+		let stats = {};
+		for (let stat of data.stats) {
+			if (stat.stat.name.includes('-')) {
+				stats[stat.stat.name.replace('-', '_')] = stat.base_stat;
+			} else {
+				stats[stat.stat.name] = stat.base_stat;
+			}
+		}
+
+		let types = [];
+
+		for (let type of data.types) {
+			let id = type.type.url.split('/').at(-2);
+			let name = type.type.name;
+			types.push({ id: +id, name });
+		}
+
+		const pokemon = {
+			id: data.id,
+			name: data.name,
+			image: data.sprites.other['official-artwork'].front_default,
+			...stats,
+			weight: data.weight,
+			height: data.height,
+			Types: types,
+		};
+
+		return res.status(200).json(pokemon);
 	} catch (error) {
 		const status = error.status || 500;
 		res.status(status).json({ error: error.message });

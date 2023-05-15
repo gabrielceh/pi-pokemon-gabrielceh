@@ -31,7 +31,7 @@ router.get('/users/pokemon', validationPagination, validationOrder, getUsersPoke
 router.get('/api/pokemon', validationPagination, validationOrder, getApiPokemon);
 
 router.post('/', verifyAuthToken, validatePokemonData, validateTypes, addPokemon);
-router.put('/', validatePokemonData, validateTypes, updatePokemon);
+router.put('/', verifyAuthToken, validatePokemonData, validateTypes, updatePokemon);
 router.delete('/:id', verifyAuthToken, deletePokemon);
 
 router.get('/user/:userId', validationPagination, getPokemonByUser);

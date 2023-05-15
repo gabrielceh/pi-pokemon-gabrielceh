@@ -10,6 +10,7 @@ import Detail from '../pages/Detail';
 import GeneralRoutes from './GeneralRoutes';
 import Add from '../pages/Add';
 import ProtectedRouted from './ProtectedRouted';
+import Profile from '../pages/Profile';
 
 function AppRouter() {
 	return (
@@ -50,6 +51,10 @@ function AppRouter() {
 				<Route
 					path={ROUTES_NAMES.ADD}
 					element={<Add />}
+				/>
+				<Route
+					path={ROUTES_NAMES.PROFILE}
+					element={<Profile />}
 				/>
 			</Route>
 

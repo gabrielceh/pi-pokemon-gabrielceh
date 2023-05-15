@@ -45,12 +45,12 @@ module.exports = (sequelize) => {
 			allowNull: false,
 			validate: {
 				min: {
-					args: [5],
-					msg: 'Min attack should be 5',
+					args: [1],
+					msg: 'Min attack should be 1',
 				},
 				max: {
-					args: [190],
-					msg: 'Max attack should be 190',
+					args: [255],
+					msg: 'Max attack should be 255',
 				},
 			},
 		},
@@ -59,12 +59,12 @@ module.exports = (sequelize) => {
 			allowNull: false,
 			validate: {
 				min: {
-					args: [20],
-					msg: 'Min defense should be 20',
+					args: [1],
+					msg: 'Min defense should be 1',
 				},
 				max: {
-					args: [160],
-					msg: 'Max defense should be 160',
+					args: [255],
+					msg: 'Max defense should be 255',
 				},
 			},
 		},
@@ -73,12 +73,12 @@ module.exports = (sequelize) => {
 			allowNull: false,
 			validate: {
 				min: {
-					args: [15],
-					msg: 'Min special attack should be 15',
+					args: [1],
+					msg: 'Min special attack should be 1',
 				},
 				max: {
-					args: [190],
-					msg: 'Max special attack should be 190',
+					args: [255],
+					msg: 'Max special attack should be 255',
 				},
 			},
 		},
@@ -87,12 +87,12 @@ module.exports = (sequelize) => {
 			allowNull: false,
 			validate: {
 				min: {
-					args: [20],
-					msg: 'Min special defense should be 20',
+					args: [1],
+					msg: 'Min special defense should be 1',
 				},
 				max: {
-					args: [250],
-					msg: 'Max special defense should be 250',
+					args: [255],
+					msg: 'Max special defense should be 255',
 				},
 			},
 		},
@@ -101,12 +101,12 @@ module.exports = (sequelize) => {
 			allowNull: false,
 			validate: {
 				min: {
-					args: [5],
-					msg: 'Min speed should be 5',
+					args: [1],
+					msg: 'Min speed should be 1',
 				},
 				max: {
-					args: [136],
-					msg: 'Max speed should be 136',
+					args: [255],
+					msg: 'Max speed should be 255',
 				},
 			},
 		},

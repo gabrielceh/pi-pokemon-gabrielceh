@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ROUTES_NAMES } from '../../utils/routes_name';
 import { Link } from 'react-router-dom';
 import { logout } from '../../redux/actions/user.action';
+import SearchButton from '../SearchButton/SearchButton';
 
 function MainMenu() {
 	const user = useSelector((state) => state.user);
@@ -14,7 +15,9 @@ function MainMenu() {
 	return (
 		<nav>
 			<Link to={ROUTES_NAMES.HOME}>Home</Link>
-			{user.access && <Link to={ROUTES_NAMES.ADD}>Add</Link>}
+			<SearchButton />
+			<Link to={ROUTES_NAMES.ADD}>Add</Link>
+			<Link to={ROUTES_NAMES.PROFILE}>Profile</Link>
 			{!user.access && (
 				<>
 					<Link to={ROUTES_NAMES.LOGIN}>LOGIN</Link> |{' '}

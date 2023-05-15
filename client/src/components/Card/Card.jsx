@@ -2,6 +2,9 @@
 
 import { Link } from 'react-router-dom';
 import { ROUTES_NAMES } from '../../utils/routes_name';
+import { useSelector } from 'react-redux';
+import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
+import { useLocation } from 'react-router-dom';
 
 function Card({ pokemon = {} }) {
 	let {
@@ -11,21 +14,33 @@ function Card({ pokemon = {} }) {
 
 		Types,
 	} = pokemon;
-	const user = pokemon?.Users ? pokemon.Users[0] : null;
+
+	const location = useLocation();
+	const userPokemon = pokemon?.Users ? pokemon.Users[0] : null;
+	const user = useSelector((state) => state.user);
 
 	return (
 		<div>
 			{pokemon.id && (
-				<Link to={`${ROUTES_NAMES.DETAIL}/${id}`}>
-					<h3>{name}</h3>
+				<div>
+					<Link to={`${ROUTES_NAMES.DETAIL}/${id}`}>
+						<h3>{name}</h3>
+					</Link>
 
 					<ul>
 						TYPES:
 						{Types.length && Types.map((type) => <li key={type.id}>{type.name}</li>)}
 					</ul>
 
-					{user && <p>USER: {user.userName}</p>}
-				</Link>
+					{userPokemon && <p>USER: {userPokemon.userName}</p>}
+					{location.pathname === ROUTES_NAMES.PROFILE &&
+						userPokemon?.userName === user?.user.userName && (
+							<EditDeleteMenu
+								pokemonId={id}
+								pokemonName={name}
+							/>
+						)}
+				</div>
 			)}
 		</div>
 	);

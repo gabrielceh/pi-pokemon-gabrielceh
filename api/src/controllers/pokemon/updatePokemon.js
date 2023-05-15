@@ -28,6 +28,8 @@ const updatePokemon = async (req, res) => {
 
 		const userFound = await User.findByPk(userId);
 
+		console.log(req.userId);
+		console.log(userFound);
 		if (!userFound) throw new CustomError(400, 'User is not in data base');
 
 		const pokemonFinded = await Pokemon.findByPk(id);
