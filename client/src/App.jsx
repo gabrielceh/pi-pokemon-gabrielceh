@@ -1,5 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import AppRouter from './routes/AppRouter';
+import { lightTheme, darkTheme } from './Theme';
+import { DarkModeContext } from './context/DarkModeContext';
+import { GlobalStyles } from './globalStyles';
+
 // import Cookies from 'js-cookie';
 /**
  * En el archivo vote.config añadir lo siguiente  para que funcione jwt-decode
@@ -10,8 +14,11 @@ import AppRouter from './routes/AppRouter';
 import jwt_decode from 'jwt-decode';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, setUserByLocal } from './redux/actions/user.action';
+import { ThemeProvider } from 'styled-components';
 
 function App() {
+	const { darkMode } = useContext(DarkModeContext);
+
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user);
 
@@ -41,7 +48,10 @@ function App() {
 
 	return (
 		<>
-			<AppRouter />
+			<ThemeProvider theme={darkMode === 'light' ? lightTheme : darkTheme}>
+				<GlobalStyles />
+				<AppRouter />
+			</ThemeProvider>
 		</>
 	);
 }

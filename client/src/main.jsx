@@ -7,11 +7,14 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { Provider } from 'react-redux';
 import store from './redux/store.js';
+import DarkModeProvider from './context/DarkModeContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<Provider store={store}>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
+		<DarkModeProvider>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</DarkModeProvider>
 	</Provider>
 );

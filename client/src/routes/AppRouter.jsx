@@ -4,7 +4,7 @@ import PublicRoutes from './PublicRoutes';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Page404 from '../pages/Page404';
-import Landing from '../pages/Landing';
+import Landing from '../pages/Landing/Landing';
 import Home from '../pages/Home';
 import Detail from '../pages/Detail';
 import GeneralRoutes from './GeneralRoutes';

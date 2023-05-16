@@ -1,38 +1,86 @@
 /* eslint-disable react/prop-types */
 
-import { Link } from 'react-router-dom';
 import { ROUTES_NAMES } from '../../utils/routes_name';
 import { useSelector } from 'react-redux';
 import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
 import { useLocation } from 'react-router-dom';
+import { useModal } from '../../hooks/useModal';
+import ImageCard from './ImageCard';
+import { typesIcons } from '../../utils/pokemonTypesImages';
+import unknownPokemon from '../../assets/img/pokemon-unknown.png';
+import {
+	CardContainer,
+	LinkStyled,
+	Name,
+	PokemonInfo,
+	TypeImg,
+	TypesSection,
+	UserSpan,
+} from './Card.styled';
+import { useState } from 'react';
 
 function Card({ pokemon = {} }) {
-	let {
-		id,
-		name,
-		image,
+	let { id, name, image, Types } = pokemon;
+	const [pos, setPos] = useState({});
 
-		Types,
-	} = pokemon;
+	const handleMousePosition = (event) => {
+		const viewport = window.innerWidth;
+
+		if (event.clientX / viewport < 0.6) {
+			setPos({
+				posX: event.clientX,
+			});
+		}
+	};
+
+	const imagePk = image || unknownPokemon;
 
 	const location = useLocation();
+	const [isOpenImg, openImg, closeImg] = useModal();
 	const userPokemon = pokemon?.Users ? pokemon.Users[0] : null;
 	const user = useSelector((state) => state.user);
 
+	const handleMouseEnter = () => {
+		openImg();
+	};
+	const handleMouseLeave = () => {
+		closeImg();
+	};
+
 	return (
-		<div>
+		<>
 			{pokemon.id && (
-				<div>
-					<Link to={`${ROUTES_NAMES.DETAIL}/${id}`}>
-						<h3>{name}</h3>
-					</Link>
+				<CardContainer
+					type={Types[0].name}
+					className='animation-move-up'
+					onMouseEnter={handleMouseEnter}
+					onMouseLeave={handleMouseLeave}
+					onMouseMove={handleMousePosition}>
+					<PokemonInfo>
+						<LinkStyled to={`${ROUTES_NAMES.DETAIL}/${id}`}>
+							<Name type={Types[0].name}>{name.toUpperCase()}</Name>
+						</LinkStyled>
 
-					<ul>
-						TYPES:
-						{Types.length && Types.map((type) => <li key={type.id}>{type.name}</li>)}
-					</ul>
+						<TypesSection>
+							{Types.length &&
+								Types.map((type) => (
+									<TypeImg
+										key={type.id}
+										src={typesIcons(type.name)}
+										alt={type.name}
+									/>
+								))}
+						</TypesSection>
+						{isOpenImg && (
+							<ImageCard
+								srcImg={imagePk}
+								altImg={name}
+								pos={pos}
+							/>
+						)}
+					</PokemonInfo>
 
-					{userPokemon && <p>USER: {userPokemon.userName}</p>}
+					{userPokemon && <UserSpan>Created by {userPokemon.userName}</UserSpan>}
 					{location.pathname === ROUTES_NAMES.PROFILE &&
 						userPokemon?.userName === user?.user.userName && (
 							<EditDeleteMenu
@@ -40,9 +88,9 @@ function Card({ pokemon = {} }) {
 								pokemonName={name}
 							/>
 						)}
-				</div>
+				</CardContainer>
 			)}
-		</div>
+		</>
 	);
 }
 
