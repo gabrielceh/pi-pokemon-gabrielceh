@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import MainMenu from '../MainMenu/MainMenu';
+import { Main } from './MainLayout.styled';
 
 function MainLayout({ children }) {
 	return (
-		<div>
+		<Main>
 			<MainMenu />
 			{children}
-		</div>
+		</Main>
 	);
 }
 

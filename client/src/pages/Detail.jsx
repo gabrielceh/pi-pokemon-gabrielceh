@@ -17,7 +17,6 @@ function Detail() {
 			dispatch(loaderOn());
 			try {
 				const { data } = await axios.get(`${base}/${endpoints.pokemon}/${params.id}`);
-				console.log(data);
 				setPokemon(data);
 			} catch (error) {
 				dispatch(apiErrorSet(error.response.data.error));

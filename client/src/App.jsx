@@ -23,7 +23,7 @@ function App() {
 	const user = useSelector((state) => state.user);
 
 	useEffect(() => {
-		if (user.access) return;
+		// if (user.access) return;
 
 		const auth_token = localStorage.getItem('auth_token');
 		if (auth_token) {

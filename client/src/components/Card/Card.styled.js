@@ -15,7 +15,9 @@ export const Name = styled.h3`
 export const CardContainer = styled.div`
 	cursor: pointer;
 	position: relative;
-	width: 90%;
+	width: 100%;
+	min-width: 250px;
+	max-width: 1440px;
 	height: 100px;
 	margin: 0 auto;
 	padding: 1rem 2rem;

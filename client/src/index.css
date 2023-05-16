@@ -34,6 +34,11 @@ h6 {
 	margin: 0;
 }
 
+input {
+	font-family: 'Varta', sans-serif;
+	font-weight: 500;
+}
+
 .animation-move-up {
 	animation-name: animation-move-up;
 	animation-timing-function: ease-in-out;
@@ -73,5 +78,59 @@ h6 {
 		opacity: 1;
 		translate: 0 0;
 		height: 100;
+	}
+}
+
+.animation-width {
+	animation-name: animation-width;
+	animation-timing-function: ease-in-out;
+	animation-duration: 0.3s;
+	animation-iteration-count: 1;
+	animation-fill-mode: backwards;
+}
+
+@keyframes animation-width {
+	0% {
+		opacity: 0;
+		translate: 0 20px;
+		width: 0;
+	}
+
+	100% {
+		opacity: 1;
+		translate: 0 0;
+		width: 100;
+	}
+}
+
+.animation-bounce-in {
+	animation: bounce-in 0.7s ease 1;
+}
+@keyframes bounce-in {
+	0% {
+		opacity: 0;
+		transform: scale(0.3);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.05);
+	}
+	70% {
+		transform: scale(0.9);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+.animation-fade-in {
+	animation: fade-in 0.7s linear 1;
+}
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
 	}
 }

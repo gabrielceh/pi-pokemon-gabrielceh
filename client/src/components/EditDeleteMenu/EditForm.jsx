@@ -8,19 +8,10 @@ import { imageTypes, validateEdit } from '../../utils/validateForms';
 import InputForm from '../Inputs/InputForm';
 import { getImageToShow } from '../../utils/showImage';
 import { getUrlFromImage } from '../../utils/getUrlFromImage';
-
-const initialForm = {
-	name: '',
-	hp: '',
-	attack: '',
-	defense: '',
-	special_attack: '',
-	special_defense: '',
-	speed: '',
-	weight: '',
-	height: '',
-	types: [],
-};
+import InputImage from '../Inputs/InputImage';
+import MultipleSelect from '../Inputs/MultipleSelect';
+import { InputGroup } from '../Inputs/Input.styled';
+import { ButtonForm } from '../../styled/Button.styled';
 
 function EditForm({ formPokemon, closeModal }) {
 	const [form, setForm] = useState(formPokemon);
@@ -41,7 +32,7 @@ function EditForm({ formPokemon, closeModal }) {
 		if (!apiError.error) {
 			return;
 		}
-		window.alert(apiError?.error);
+		window.alert('EditForm', apiError?.error);
 	}, [apiError]);
 
 	useEffect(() => {
@@ -65,6 +56,8 @@ function EditForm({ formPokemon, closeModal }) {
 	}, []);
 
 	const handleInputChange = (event) => {
+		event.preventDefault();
+		event.stopPropagation();
 		const nameInput = event.target.name;
 		const value = event.target.value;
 		setForm({
@@ -82,6 +75,8 @@ function EditForm({ formPokemon, closeModal }) {
 	};
 
 	const handleMultipleSelect = (event) => {
+		event.preventDefault();
+		event.stopPropagation();
 		const options = event.target.options;
 		const value = [];
 
@@ -108,6 +103,8 @@ function EditForm({ formPokemon, closeModal }) {
 	};
 
 	const handleImageChange = async (event) => {
+		event.preventDefault();
+		event.stopPropagation();
 		if (imageTypes(event.target.files[0].type) === false) {
 			setErrors({
 				...form,
@@ -130,12 +127,14 @@ function EditForm({ formPokemon, closeModal }) {
 
 	const handleOnCloseImage = (event) => {
 		event.preventDefault();
+		event.stopPropagation();
 		formImage.value = '';
 		seturlImageToShow(null);
 	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		event.stopPropagation();
 
 		for (let error in errors) {
 			if (errors[error]) return window.alert(`${errors[error]}`);
@@ -152,7 +151,6 @@ function EditForm({ formPokemon, closeModal }) {
 	return (
 		form && (
 			<form onSubmit={handleSubmit}>
-				<h1>Create your Pokémon!!</h1>
 				<InputForm
 					label='My Pókemon name'
 					type='text'
@@ -162,117 +160,109 @@ function EditForm({ formPokemon, closeModal }) {
 					error={errors.name}
 				/>
 
-				<div>
-					<label htmlFor='formImage'>My Pokémon image</label>
-					<input
-						type='file'
-						name='formImage'
-						id='formImage'
-						onChange={handleImageChange}
+				<InputImage
+					label='My Pokémon image'
+					name='formImage'
+					onchange={handleImageChange}
+					src={urlImageToShow}
+					closeImg={handleOnCloseImage}
+					alt={form.name}
+					error={errors.image}
+				/>
+				<InputGroup>
+					<InputForm
+						label='My Pókemon HP'
+						type='number'
+						name='hp'
+						value={form.hp}
+						handleInput={handleInputChange}
+						error={errors.hp}
 					/>
-					{urlImageToShow && (
-						<>
-							<button onClick={handleOnCloseImage}>x</button>
-							<img
-								src={urlImageToShow}
-								alt={form.name}
-								width={100}
-								height={100}
-							/>
-						</>
-					)}
-					{errors.image ? <span>{errors.image}</span> : <span> </span>}
-				</div>
+					<InputForm
+						label='My Pókemon Attack'
+						type='number'
+						name='attack'
+						value={form.attack}
+						handleInput={handleInputChange}
+						error={errors.attack}
+					/>
+				</InputGroup>
 
-				<InputForm
-					label='My Pókemon HP'
-					type='number'
-					name='hp'
-					value={form.hp}
-					handleInput={handleInputChange}
-					error={errors.hp}
-				/>
-				<InputForm
-					label='My Pókemon Attack'
-					type='number'
-					name='attack'
-					value={form.attack}
-					handleInput={handleInputChange}
-					error={errors.attack}
-				/>
-				<InputForm
-					label='My Pókemon Defense'
-					type='number'
-					name='defense'
-					value={form.defense}
-					handleInput={handleInputChange}
-					error={errors.defense}
-				/>
-				<InputForm
-					label='My Pókemon Special Attack'
-					type='number'
-					name='special_attack'
-					value={form.special_attack}
-					handleInput={handleInputChange}
-					error={errors.special_attack}
-				/>
-				<InputForm
-					label='My Pókemon Special Defense'
-					type='number'
-					name='special_defense'
-					value={form.special_defense}
-					handleInput={handleInputChange}
-					error={errors.special_defense}
-				/>
-				<InputForm
-					label='My Pókemon Speed'
-					type='number'
-					name='speed'
-					value={form.speed}
-					handleInput={handleInputChange}
-					error={errors.speed}
-				/>
-				<InputForm
-					label='My Pókemon Height'
-					type='number'
-					name='height'
-					value={form.height}
-					handleInput={handleInputChange}
-					error={errors.height}
-				/>
-				<InputForm
-					label='My Pókemon Weight'
-					type='number'
-					name='weight'
-					value={form.weight}
-					handleInput={handleInputChange}
-					error={errors.weight}
-				/>
+				<InputGroup>
+					<InputForm
+						label='My Pókemon Defense'
+						type='number'
+						name='defense'
+						value={form.defense}
+						handleInput={handleInputChange}
+						error={errors.defense}
+					/>
+					<InputForm
+						label='My Pókemon Special Attack'
+						type='number'
+						name='special_attack'
+						value={form.special_attack}
+						handleInput={handleInputChange}
+						error={errors.special_attack}
+					/>
+				</InputGroup>
+
+				<InputGroup>
+					<InputForm
+						label='My Pókemon Special Defense'
+						type='number'
+						name='special_defense'
+						value={form.special_defense}
+						handleInput={handleInputChange}
+						error={errors.special_defense}
+					/>
+					<InputForm
+						label='My Pókemon Speed'
+						type='number'
+						name='speed'
+						value={form.speed}
+						handleInput={handleInputChange}
+						error={errors.speed}
+					/>
+				</InputGroup>
+
+				<InputGroup>
+					<InputForm
+						label='My Pókemon Height'
+						type='number'
+						name='height'
+						value={form.height}
+						handleInput={handleInputChange}
+						error={errors.height}
+					/>
+					<InputForm
+						label='My Pókemon Weight'
+						type='number'
+						name='weight'
+						value={form.weight}
+						handleInput={handleInputChange}
+						error={errors.weight}
+					/>
+				</InputGroup>
 
 				{loading ? (
 					<div>Loading</div>
 				) : (
-					<div>
-						<select
-							name='types'
-							id='types'
-							value={form.types}
-							onChange={handleMultipleSelect}
-							multiple={true}>
-							{typesPokemon.length &&
-								typesPokemon.map((type) => (
-									<option
-										key={type.id}
-										value={type.id}>
-										{type.name}
-									</option>
-								))}
-						</select>
-						{errors.types ? <span>{errors.types}</span> : <span> </span>}
-					</div>
+					<MultipleSelect
+						label='My Pokémon types'
+						name='types'
+						defaultValue={form.types}
+						onchange={handleMultipleSelect}
+						data={typesPokemon}
+						error={errors.types}
+					/>
 				)}
 
-				<button disabled={loading}>send</button>
+				<ButtonForm
+					className='edit'
+					disabled={loading}>
+					Edit
+				</ButtonForm>
 			</form>
 		)
 	);

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 
 import { base, endpoints } from '../../utils/endpoints';
+import { Modalstyled } from '../../styled/Modal.styled.js';
+import { Container, ButtonClose, Result, ErrorSearch, ContainerTop } from './ModalSearch.styled.js';
 import FormSearch from '../FormSearch/FormSearch';
 import Card from '../Card/Card';
 
@@ -24,15 +26,27 @@ function ModalSearch({ closeModal }) {
 		}
 	};
 	return (
-		<div>
-			<button onClick={closeModal}>x</button>
-			<FormSearch onSearch={handleSearch} />
-			<div>
-				{loading && <p>loading</p>}
-				{data && <Card pokemon={data} />}
-				{error && <p>{error}</p>}
-			</div>
-		</div>
+		<Modalstyled>
+			<Container>
+				<ContainerTop>
+					<ButtonClose onClick={closeModal}>ESC</ButtonClose>
+					<FormSearch onSearch={handleSearch} />
+				</ContainerTop>
+				<Result>
+					{loading && <p>loading</p>}
+					{data && (
+						<div>
+							<p>Result:</p>
+							<Card
+								pokemon={data}
+								onClose={closeModal}
+							/>
+						</div>
+					)}
+					{error && <ErrorSearch>{error}</ErrorSearch>}
+				</Result>
+			</Container>
+		</Modalstyled>
 	);
 }
 

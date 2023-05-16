@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import InputForm from '../Inputs/InputForm';
 import { useSelector } from 'react-redux';
+import { ButtonForm } from '../../styled/Button.styled';
+import { Formstyled } from './FormSearch.styled';
 
 function FormSearch({ onSearch }) {
 	const [search, setSearch] = useState('');
@@ -27,17 +29,24 @@ function FormSearch({ onSearch }) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<Formstyled onSubmit={handleSubmit}>
 			<InputForm
-				label='Buscar ...'
+				label=''
+				placeholder='Ex: pikachu'
 				type='search'
 				name='search'
 				value={search}
 				handleInput={handleInput}
 				error={error}
 			/>
-			<button disabled={loading}>search</button>
-		</form>
+			<div>
+				<ButtonForm
+					className='search'
+					disabled={loading}>
+					search
+				</ButtonForm>
+			</div>
+		</Formstyled>
 	);
 }
 

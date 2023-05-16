@@ -22,7 +22,6 @@ export const login = (userData) => {
 
 		try {
 			const { data } = await axios.post(`${endpoints.login}`, options);
-			console.log('user.actions:', data);
 			localStorage.setItem('auth_token', data.auth_token.token);
 			dispatch({
 				type: LOGIN,
@@ -75,9 +74,9 @@ export const logout = () => {
 		};
 
 		try {
-			const { data } = await axios.get(`${endpoints.logout}`, optins);
-			console.log(data);
+			await axios.get(`${endpoints.logout}`, optins);
 			localStorage.removeItem('auth_token');
+			window.location.reload();
 			dispatch({
 				type: LOGOUT,
 			});

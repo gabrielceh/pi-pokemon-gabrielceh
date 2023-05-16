@@ -107,7 +107,7 @@ const validateCreateForm = (form) => {
 const validateEdit = (form) => {
 	const errors = {};
 
-	if (form.name && !form.name.trim()) errors.name = 'Enter a name';
+	if (!form.name.trim()) errors.name = 'Enter a name';
 	else if (form.name && !NAME_REGEX.test(form.name))
 		errors.name = 'Name must only contain alphanumeric characters';
 

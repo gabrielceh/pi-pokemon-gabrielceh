@@ -4,14 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useModal } from '../../hooks/useModal';
 import { apiErrorReset } from '../../redux/actions/apieError.actions';
 import { deleteUserPokemon, resetSuccessPokemonUser } from '../../redux/actions/pokemonUser.action';
-import ModalEditPokemon from '../ModalEditPokemon/ModalEditPokemon';
+import ModalEditPokemon from './ModalEditPokemon';
 import ModalDelete from './ModalDelete';
+import VerticalDots from '../Icons/VerticalDots';
+import { ButtonMenu, ContainerMenu, MenuItems, MenuOptions } from './EditDeleteMenu.styles';
 
 function EditDeleteMenu({ pokemonId, pokemonName }) {
 	const dispatch = useDispatch();
 	const apiError = useSelector((state) => state.apiError);
 	const pokemonUser = useSelector((state) => state.pokemonUser);
 
+	const [isOpenMenu, openMenu, closeMenu] = useModal();
 	const [isOpenEdit, openModalEdit, closeModalEdit] = useModal();
 	const [isOpenDelete, openModalDelete, closeModalDelete] = useModal();
 
@@ -27,15 +30,23 @@ function EditDeleteMenu({ pokemonId, pokemonName }) {
 		if (!apiError.error) {
 			return;
 		}
-		window.alert(apiError?.error);
+		window.alert('EditDeleteMenu:', apiError?.error);
 	}, [apiError]);
 
 	useEffect(() => {
 		if (!pokemonUser.success) {
 			return;
 		}
-		window.alert(pokemonUser.success);
+		window.alert('EditDeleteMenu:', pokemonUser.success);
 	}, [pokemonUser]);
+
+	const handleOpenMenu = (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+		if (isOpenMenu) return closeMenu();
+
+		openMenu();
+	};
 
 	const handleEdit = (event) => {
 		event.preventDefault();
@@ -48,11 +59,18 @@ function EditDeleteMenu({ pokemonId, pokemonName }) {
 	};
 	return (
 		<>
-			<nav>
-				<button onClick={handleEdit}>Edit</button>
-				<button onClick={openModalDelete}>Delete</button>
-			</nav>
+			<ContainerMenu>
+				<ButtonMenu onClick={handleOpenMenu}>
+					<VerticalDots />
+				</ButtonMenu>
 
+				{isOpenMenu && (
+					<MenuOptions className='animation-width'>
+						<MenuItems onClick={handleEdit}>Edit</MenuItems>
+						<MenuItems onClick={openModalDelete}>Delete</MenuItems>
+					</MenuOptions>
+				)}
+			</ContainerMenu>
 			{isOpenEdit && (
 				<ModalEditPokemon
 					closeModal={closeModalEdit}

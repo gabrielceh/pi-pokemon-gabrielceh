@@ -36,15 +36,15 @@ const getPokemonById = async (req, res) => {
 
 		if (isNaN(id)) throw new CustomError(400, 'id should be a number');
 
+		const pokemonUserFinded = await Pokemon.findOne({ where: { id: +id }, ...optionsUser });
+		if (pokemonUserFinded) {
+			return res.status(200).json(pokemonUserFinded);
+		}
+
 		const pokemonApiFinded = await getPokemonData(id);
 
 		if (pokemonApiFinded.name) {
 			return res.status(200).json(pokemonApiFinded);
-		}
-
-		const pokemonUserFinded = await Pokemon.findOne({ where: { id: +id }, ...optionsUser });
-		if (pokemonUserFinded) {
-			return res.status(200).json(pokemonUserFinded);
 		}
 
 		throw new CustomError(400, `Pokemon with id ${id} it not on data base`);

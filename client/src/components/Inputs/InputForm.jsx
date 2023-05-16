@@ -1,17 +1,21 @@
+import { ErrorMsg, Input, InputContainer, Label } from './Input.styled';
+
 // eslint-disable-next-line react/prop-types
-function InputForm({ label, type, name, value, handleInput, error }) {
+function InputForm({ label, type, name, value, handleInput, error, placeholder = '' }) {
 	return (
-		<div>
-			<label htmlFor={name}>{label}:</label>
-			<input
+		<InputContainer>
+			<Label htmlFor={name}>{label}</Label>
+			<Input
 				type={type}
 				value={value}
 				name={name}
 				id={name}
 				onChange={handleInput}
+				error={error ? true : false}
+				placeholder={placeholder}
 			/>
-			{error ? <span>{error}</span> : <span> </span>}
-		</div>
+			{error ? <ErrorMsg>{error}</ErrorMsg> : <ErrorMsg> </ErrorMsg>}
+		</InputContainer>
 	);
 }
 

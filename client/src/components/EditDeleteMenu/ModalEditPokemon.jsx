@@ -7,7 +7,10 @@ import { apiErrorSet } from '../../redux/actions/apieError.actions';
 import axios from 'axios';
 import { base, endpoints } from '../../utils/endpoints';
 import { loaderOff, loaderOn } from '../../redux/actions/loading.actions';
-import EditForm from '../EditDeleteMenu/EditForm';
+import EditForm from './EditForm';
+import { Modalstyled } from '../../styled/Modal.styled';
+import { ButtonClose, Container, Titile } from './ModalEditPokemon.styled';
+import CloseIcon from '../Icons/CloseIcon';
 
 function ModalEditPokemon({ closeModal, pokemonId }) {
 	const [form, setForm] = useState(null);
@@ -44,21 +47,29 @@ function ModalEditPokemon({ closeModal, pokemonId }) {
 	}, []);
 
 	const handleCloseModal = (event) => {
+		event.stopPropagation();
 		event.preventDefault();
 		closeModal();
 	};
 
 	return (
-		<div>
-			<button onClick={handleCloseModal}>x</button>
-			{loading && <p>loading...</p>}
-			{form && (
-				<EditForm
-					formPokemon={form}
-					closeModal={closeModal}
-				/>
-			)}
-		</div>
+		<Modalstyled className='animation-fade-in '>
+			<Container className='animation-bounce-in'>
+				<ButtonClose onClick={handleCloseModal}>
+					<CloseIcon />
+				</ButtonClose>
+				{loading && <p>loading...</p>}
+				{form && (
+					<>
+						<Titile>Edit</Titile>
+						<EditForm
+							formPokemon={form}
+							closeModal={closeModal}
+						/>
+					</>
+				)}
+			</Container>
+		</Modalstyled>
 	);
 }
 
