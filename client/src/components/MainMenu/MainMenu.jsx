@@ -5,35 +5,100 @@ import { Link } from 'react-router-dom';
 import { logout } from '../../redux/actions/user.action';
 import SearchButton from '../SearchButton/SearchButton';
 import BtnDark from '../BtnDark/BtnDark';
-import { MenuBar } from './MainMenu.styled';
+import { ConfigMenu, ContMenu, ContSVG, MenuBar } from './MainMenu.styled';
+import HomeICon from '../Icons/HomeIcon';
+import AddICon from '../Icons/AddICon';
+import UserICon from '../Icons/UserIcon';
+import LoginICon from '../Icons/LoginIcon';
+import { ButtonMenu } from '../../styled/Button.styled';
+import LogoutIcon from '../Icons/LogoutICon';
+import HamburgerMenu from '../Icons/HamburgerMenu';
+import { useContext } from 'react';
+import { DarkModeContext } from '../../context/DarkModeContext';
+import { useModal } from '../../hooks/useModal';
 
 function MainMenu() {
+	const { darkMode } = useContext(DarkModeContext);
+	const [isOpenConfig, openConfig, closeConfig] = useModal();
+
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 
 	const handleLogout = () => {
 		dispatch(logout());
 	};
+
+	const handleOpenConfig = () => {
+		if (isOpenConfig) {
+			closeConfig();
+		} else {
+			openConfig();
+		}
+	};
+
 	return (
 		<MenuBar>
-			<Link to={ROUTES_NAMES.HOME}>Home</Link>
-			<SearchButton />
-			<Link to={ROUTES_NAMES.ADD}>Add</Link>
-			<div>
-				<BtnDark />
-				<Link to={ROUTES_NAMES.PROFILE}>Profile</Link>
-				{!user.access && (
-					<>
-						<Link to={ROUTES_NAMES.LOGIN}>LOGIN</Link> |{' '}
-					</>
+			<ContMenu>
+				<Link
+					to={ROUTES_NAMES.HOME}
+					title='Home'>
+					<ContSVG>
+						<HomeICon />
+					</ContSVG>
+				</Link>
+
+				<SearchButton />
+
+				<Link
+					to={ROUTES_NAMES.ADD}
+					title='Add'>
+					<ContSVG>
+						<AddICon />
+					</ContSVG>
+				</Link>
+
+				<Link
+					to={ROUTES_NAMES.PROFILE}
+					title='Profile'>
+					<ContSVG>
+						<UserICon />
+					</ContSVG>
+				</Link>
+
+				<ButtonMenu
+					onClick={handleOpenConfig}
+					title='More'>
+					<HamburgerMenu />
+				</ButtonMenu>
+
+				{isOpenConfig && (
+					<ConfigMenu
+						className='animation-gelatine'
+						darkMode={darkMode}>
+						<BtnDark />
+						{!user.access && (
+							<>
+								<Link
+									to={ROUTES_NAMES.LOGIN}
+									title='Login'>
+									<ContSVG>
+										<LoginICon />
+									</ContSVG>
+								</Link>
+							</>
+						)}
+						{user.access && (
+							<div>
+								<ButtonMenu
+									onClick={handleLogout}
+									title='Logout'>
+									<LogoutIcon />
+								</ButtonMenu>
+							</div>
+						)}
+					</ConfigMenu>
 				)}
-				{user.access && (
-					<div>
-						<p>{user.user.userName}</p>
-						<button onClick={handleLogout}>logout</button>
-					</div>
-				)}
-			</div>
+			</ContMenu>
 		</MenuBar>
 	);
 }

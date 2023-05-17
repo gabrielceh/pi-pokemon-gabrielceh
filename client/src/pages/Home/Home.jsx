@@ -2,15 +2,16 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { loaderOn, loaderOff } from '../redux/actions/loading.actions';
-import { apiErrorSet, apiErrorReset } from '../redux/actions/apieError.actions';
-import { base, endpoints } from '../utils/endpoints';
+import { loaderOn, loaderOff } from '../../redux/actions/loading.actions';
+import { apiErrorSet, apiErrorReset } from '../../redux/actions/apieError.actions';
+import { base, endpoints } from '../../utils/endpoints';
 
-import Pagination from '../components/Pagination/Pagination';
-import Cards from '../components/Cards/Cards';
-import OrderSelect from '../components/OrderSelect/OrderSelect';
-import FilterSelect from '../components/FilterSelect/FilterSelect';
-import OriginSelect from '../components/OriginSelect/OriginSelect';
+import Pagination from '../../components/Pagination/Pagination';
+import Cards from '../../components/Cards/Cards';
+import OrderSelect from '../../components/OrderSelect/OrderSelect';
+import FilterSelect from '../../components/FilterSelect/FilterSelect';
+import OriginSelect from '../../components/OriginSelect/OriginSelect';
+import { ContainerPage } from '../../styled/Container.styled';
 
 function Home() {
 	const [data, setData] = useState([]);
@@ -67,7 +68,7 @@ function Home() {
 	};
 
 	return (
-		<div>
+		<ContainerPage>
 			<h2>Home</h2>
 
 			<OrderSelect
@@ -106,7 +107,7 @@ function Home() {
 					/>
 				</>
 			)}
-		</div>
+		</ContainerPage>
 	);
 }
 

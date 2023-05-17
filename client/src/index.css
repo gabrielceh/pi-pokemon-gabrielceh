@@ -124,7 +124,7 @@ input {
 }
 
 .animation-fade-in {
-	animation: fade-in 0.7s linear 1;
+	animation: fade-in 0.5s linear 1;
 }
 @keyframes fade-in {
 	from {
@@ -132,5 +132,24 @@ input {
 	}
 	to {
 		opacity: 1;
+	}
+}
+
+.animation-gelatine {
+	animation: gelatine 0.5s 1;
+}
+@keyframes gelatine {
+	from,
+	to {
+		transform: scale(1, 1);
+	}
+	25% {
+		transform: scale(0.9, 1.1);
+	}
+	50% {
+		transform: scale(1.1, 0.9);
+	}
+	75% {
+		transform: scale(0.95, 1.05);
 	}
 }

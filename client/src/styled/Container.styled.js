@@ -11,3 +11,19 @@ export const ContainerStyled = styled.div`
 		}
 	}
 `;
+
+export const ContainerPage = styled.div`
+	padding: 2rem;
+	padding-bottom: 9rem;
+	width: 100%;
+	margin: 0 auto;
+
+	&.detail {
+		background-color: ${({ theme, type }) => type !== undefined && theme.pokemonColors[type].light};
+	}
+
+	@media ${({ theme }) => theme.screenSize.tablet} {
+		padding-left: 100px;
+		padding-bottom: 3rem;
+	}
+`;

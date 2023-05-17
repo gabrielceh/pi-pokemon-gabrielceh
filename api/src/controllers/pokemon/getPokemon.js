@@ -2,7 +2,7 @@ const { Op } = require('sequelize');
 const CustomError = require('../../classes/CustomError');
 const { Pokemon_Api, Pokemon } = require('../../db');
 const { getMyHost } = require('../../utils/localhost');
-const { optionsApi, optionsUser } = require('../../utils/optionToFindPokemon');
+const { optionsApi, optionsUser, limitToSearchInApi } = require('../../utils/optionToFindPokemon');
 const { pagination } = require('../../utils/pagination');
 const { getPokemonSlice } = require('../../utils/pokemonSlice');
 const { POKE_API_URL, POKEMON_SOURCE } = require('../../utils/pokeApiUrl');
@@ -152,7 +152,9 @@ const getAllPokemon = async (res, req, optionsApi, optionsUser) => {
 		const myHost = getMyHost(req);
 
 		if (!pokemonApiList.length) {
-			const apiPokemon = await fetch(`${POKE_API_URL}/${POKEMON_SOURCE}/?offset=0&limit=40`);
+			const apiPokemon = await fetch(
+				`${POKE_API_URL}/${POKEMON_SOURCE}/?offset=0&limit=${limitToSearchInApi}`
+			);
 			const { results } = await apiPokemon.json();
 
 			pokemonApiList = await Promise.all(results.map((pokemon) => getPokemonData(pokemon.name)));

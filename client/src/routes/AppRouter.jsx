@@ -5,10 +5,10 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Page404 from '../pages/Page404';
 import Landing from '../pages/Landing/Landing';
-import Home from '../pages/Home';
-import Detail from '../pages/Detail';
+import Home from '../pages/Home/Home';
+import Detail from '../pages/Detail/Detail';
 import GeneralRoutes from './GeneralRoutes';
-import Add from '../pages/Add';
+import Add from '../pages/Add/Add';
 import ProtectedRouted from './ProtectedRouted';
 import Profile from '../pages/Profile';
 

@@ -26,8 +26,8 @@ function ModalSearch({ closeModal }) {
 		}
 	};
 	return (
-		<Modalstyled>
-			<Container>
+		<Modalstyled className='animation-fade-in'>
+			<Container className='animation-gelatine '>
 				<ContainerTop>
 					<ButtonClose onClick={closeModal}>ESC</ButtonClose>
 					<FormSearch onSearch={handleSearch} />

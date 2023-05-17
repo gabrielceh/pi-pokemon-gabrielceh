@@ -11,6 +11,7 @@ const {
 	includeTypes,
 	optionsApi,
 	optionsUser,
+	limitToSearchInApi,
 } = require('../utils/optionToFindPokemon');
 const { getPokemonData } = require('../utils/getPokemonData');
 
@@ -207,7 +208,9 @@ const typeFilterById = async (req, res) => {
 		limit = limit ? +limit : 12;
 
 		if (!pokemonApiList.length) {
-			const apiPokemon = await fetch(`${POKE_API_URL}/${POKEMON_SOURCE}/?offset=0&limit=40`);
+			const apiPokemon = await fetch(
+				`${POKE_API_URL}/${POKEMON_SOURCE}/?offset=0&limit=${limitToSearchInApi}`
+			);
 			const { results } = await apiPokemon.json();
 
 			pokemonApiList = await Promise.all(results.map((pokemon) => getPokemonData(pokemon.name)));

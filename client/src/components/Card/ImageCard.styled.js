@@ -10,6 +10,8 @@ export const ImageContainer = styled.div`
 	border: ${({ theme }) => `2px solid ${theme.colors.darkBlue['100']}`};
 	position: absolute;
 	top: -90%;
+	left: 50%;
+	transform: translateX(-50%);
 `;
 
 export const Img = styled.img`

@@ -47,3 +47,18 @@ export const ButtonForm = styled.button`
 		}
 	}
 `;
+
+export const ButtonMenu = styled.button`
+	cursor: pointer;
+	background-color: transparent;
+	border: none;
+
+	& svg {
+		stroke: ${({ theme }) => theme.colors.darkBlue['400']};
+		transition: stroke 0.3s ease-in-out;
+	}
+
+	&:hover svg {
+		stroke: ${({ theme }) => theme.colors.darkBlue['600']};
+	}
+`;

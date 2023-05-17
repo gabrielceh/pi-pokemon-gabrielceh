@@ -7,6 +7,8 @@
 
 const { Types, User } = require('../db');
 
+const limitToSearchInApi = 80;
+
 const attributes = [
 	'id',
 	'name',
@@ -46,4 +48,4 @@ const optionsUser = {
 	],
 };
 
-module.exports = { attributes, includeTypes, optionsApi, optionsUser };
+module.exports = { attributes, includeTypes, optionsApi, optionsUser, limitToSearchInApi };
