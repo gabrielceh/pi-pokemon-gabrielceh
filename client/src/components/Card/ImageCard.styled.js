@@ -5,7 +5,7 @@ export const ImageContainer = styled.div`
 	height: 160px;
 	padding: 1rem;
 	overflow: hidden;
-	background-color: ${({ theme }) => theme.body};
+	background-color: ${({ theme, type }) => theme.pokemonColors[type].medium};
 	border-radius: 10px;
 	border: ${({ theme }) => `2px solid ${theme.colors.darkBlue['100']}`};
 	position: absolute;

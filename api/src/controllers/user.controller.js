@@ -17,7 +17,6 @@ const register = async (req, res) => {
 		});
 
 		if (emailFinded) {
-			console.log(email, userName);
 			throw new CustomError(400, 'Email or User name is already in the data base');
 		}
 

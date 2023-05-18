@@ -5,6 +5,7 @@ const initialState = {
 	error: null,
 	user: null,
 	authToken: null,
+	success: null,
 };
 
 export const userReducer = (state = initialState, action) => {

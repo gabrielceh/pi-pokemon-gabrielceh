@@ -36,7 +36,7 @@ export const theme = {
 			dark: '#57301c',
 		},
 		rock: {
-			light: '#e3dbc5',
+			light: '#e9e2d1',
 			medium: '#C6B78A',
 			dark: '#4f4937',
 		},
@@ -56,7 +56,7 @@ export const theme = {
 			dark: '#243940',
 		},
 		fire: {
-			light: '#ffceaa',
+			light: '#ffd7bb',
 			medium: '#FE9C55',
 			dark: '#b26d3b',
 		},
@@ -71,8 +71,8 @@ export const theme = {
 			dark: '#274b24',
 		},
 		electric: {
-			light: '#f9e99d',
-			medium: '#F3D33B',
+			light: '#fdf6d8',
+			medium: '#f3d23b',
 			dark: '#aa9429',
 		},
 		psychic: {

@@ -1,10 +1,28 @@
+/* eslint-disable react/prop-types */
+import { useContext } from 'react';
 import { ErrorMsg, Input, InputContainer, Label } from './Input.styled';
+import { DarkModeContext } from '../../context/DarkModeContext';
 
-// eslint-disable-next-line react/prop-types
-function InputForm({ label, type, name, value, handleInput, error, placeholder = '' }) {
+function InputForm({
+	label,
+	type,
+	name,
+	value,
+	handleInput,
+	error,
+	placeholder = '',
+	min = 0,
+	max = 255,
+}) {
+	const { darkMode } = useContext(DarkModeContext);
+
 	return (
 		<InputContainer>
-			<Label htmlFor={name}>{label}</Label>
+			<Label
+				htmlFor={name}
+				darkMode={darkMode}>
+				{label}
+			</Label>
 			<Input
 				type={type}
 				value={value}
@@ -13,6 +31,9 @@ function InputForm({ label, type, name, value, handleInput, error, placeholder =
 				onChange={handleInput}
 				error={error ? true : false}
 				placeholder={placeholder}
+				darkMode={darkMode}
+				min={min}
+				max={max}
 			/>
 			{error ? <ErrorMsg>{error}</ErrorMsg> : <ErrorMsg> </ErrorMsg>}
 		</InputContainer>

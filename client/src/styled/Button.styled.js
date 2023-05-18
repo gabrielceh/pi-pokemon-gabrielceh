@@ -46,6 +46,27 @@ export const ButtonForm = styled.button`
 			color: ${({ theme }) => theme.colors.darkBlue['50']};
 		}
 	}
+
+	&.login {
+		border: ${({ theme }) => `2px solid ${theme.colors.darkBlue['500']}`};
+		color: ${({ theme }) => theme.colors.darkBlue['500']};
+		transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+
+		&:hover {
+			background-color: ${({ theme }) => theme.colors.darkBlue['500']};
+			color: ${({ theme }) => theme.colors.darkBlue['50']};
+		}
+	}
+
+	&:disabled {
+		background-color: ${({ theme }) => theme.colors.slate['400']};
+		color: ${({ theme }) => theme.colors.slate['200']};
+	}
+
+	&:disabled:hover {
+		background-color: ${({ theme }) => theme.colors.slate['600']};
+		color: ${({ theme }) => theme.colors.slate['100']};
+	}
 `;
 
 export const ButtonMenu = styled.button`
@@ -60,5 +81,18 @@ export const ButtonMenu = styled.button`
 
 	&:hover svg {
 		stroke: ${({ theme }) => theme.colors.darkBlue['600']};
+	}
+`;
+
+export const ButtonCard = styled.button`
+	cursor: pointer;
+	border: none;
+	background-color: transparent;
+
+	& svg {
+		transition: stroke 0.3s ease-in-out;
+	}
+	&:hover svg {
+		stroke: ${({ theme, type }) => theme.pokemonColors[type].medium};
 	}
 `;

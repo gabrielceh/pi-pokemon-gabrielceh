@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { registerUser } from '../redux/actions/user.action';
-import { apiErrorReset } from '../redux/actions/apieError.actions';
-import { resetUser } from '../redux/actions/user.action';
-import { ROUTES_NAMES } from '../utils/routes_name';
-import { validateRegisterForm } from '../utils/validateForms';
-import InputForm from '../components/Inputs/InputForm';
+import { registerUser } from '../../redux/actions/user.action';
+import { apiErrorReset } from '../../redux/actions/apieError.actions';
+import { resetUser } from '../../redux/actions/user.action';
+import { ROUTES_NAMES } from '../../utils/routes_name';
+import { validateRegisterForm } from '../../utils/validateForms';
+import InputForm from '../Inputs/InputForm';
+import { Form } from '../../styled/Form.styled';
+import { Containerform, Title } from './RegisterForm.styled';
+import { ButtonForm } from '../../styled/Button.styled';
 
 const initialState = {
 	email: '',
@@ -16,14 +19,14 @@ const initialState = {
 	userName: '',
 };
 
-function Register() {
+function RegisterForm() {
 	const [form, setform] = useState(initialState);
 	const [errors, setErrors] = useState({});
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user);
 	const loading = useSelector((state) => state.loading);
-	const apiError = useSelector((state) => state.apiError);
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -34,16 +37,7 @@ function Register() {
 	}, []);
 
 	useEffect(() => {
-		console.log(apiError);
-		if (!apiError.error) {
-			return;
-		}
-		window.alert(apiError?.error);
-	}, [apiError]);
-
-	useEffect(() => {
 		if (user.access) {
-			console.log('success');
 			return navigate(ROUTES_NAMES.LOGIN);
 		}
 	}, [user]);
@@ -74,10 +68,10 @@ function Register() {
 	};
 
 	return (
-		<div>
-			<h2>Register</h2>
-			<Link to={ROUTES_NAMES.LOGIN}>Login</Link>
-			<form
+		<Containerform>
+			<Title>“Make your wonderful dream a reality, and it will become your truth.”</Title>
+
+			<Form
 				action=''
 				onSubmit={handleSubmit}>
 				<InputForm
@@ -115,14 +109,20 @@ function Register() {
 					error={errors.repeatPassword}
 				/>
 
-				<button
+				<ButtonForm
+					className='login'
 					disabled={loading}
 					type='submit'>
 					Register
-				</button>
-			</form>
-		</div>
+				</ButtonForm>
+				<div>
+					<p>
+						Do you have an account? <Link to={ROUTES_NAMES.LOGIN}>Login</Link>
+					</p>
+				</div>
+			</Form>
+		</Containerform>
 	);
 }
 
-export default Register;
+export default RegisterForm;

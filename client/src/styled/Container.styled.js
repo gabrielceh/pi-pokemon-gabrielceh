@@ -19,7 +19,8 @@ export const ContainerPage = styled.div`
 	margin: 0 auto;
 
 	&.detail {
-		background-color: ${({ theme, type }) => type !== undefined && theme.pokemonColors[type].light};
+		background-color: ${({ theme, type }) =>
+			type === undefined ? theme.body : theme.pokemonColors[type].light};
 	}
 
 	@media ${({ theme }) => theme.screenSize.tablet} {

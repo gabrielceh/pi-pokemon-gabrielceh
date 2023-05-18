@@ -9,12 +9,6 @@ export const CREATE_USER_POKEMON = 'CREATE_USER_POKEMON';
 export const DELETE_USER_POKEMON = 'DELETE_USER_POKEMON';
 export const RESET_SUCCESS_USER_POKEMON = 'RESET_SUCCESS_USER_POKEMON';
 
-const token = localStorage.getItem('auth_token');
-
-const config = {
-	headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-};
-
 export const getUserPokemon = (userId) => {
 	return async function (dispatch) {
 		dispatch(loaderOn());
@@ -50,6 +44,12 @@ export const createUserPokemon = (pokemon) => {
 			types: pokemon.types,
 		};
 
+		const token = localStorage.getItem('auth_token');
+
+		const config = {
+			headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+		};
+
 		try {
 			const { data } = await axios.post(`${base}/${endpoints.pokemon}`, dataBody, config);
 			dispatch({
@@ -72,17 +72,25 @@ export const updateUserPokemon = (pokemon) => {
 			id: pokemon.id,
 			name: pokemon.name,
 			image: pokemon.image || null,
-			hp: pokemon.hp,
-			attack: pokemon.attack,
-			defense: pokemon.defense,
-			special_attack: pokemon.special_attack,
-			special_defense: pokemon.special_defense,
-			speed: pokemon.speed,
-			weight: pokemon.weight || null,
-			height: pokemon.height || null,
+			hp: +pokemon.hp,
+			attack: +pokemon.attack,
+			defense: +pokemon.defense,
+			special_attack: +pokemon.special_attack,
+			special_defense: +pokemon.special_defense,
+			speed: +pokemon.speed,
+			weight: +pokemon.weight || null,
+			height: +pokemon.height || null,
 			types: pokemon.types,
 			userId: pokemon.userId,
 		};
+
+		const token = localStorage.getItem('auth_token');
+
+		const config = {
+			headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+		};
+
+		console.log(token);
 
 		try {
 			const { data } = await axios.put(`${base}/${endpoints.pokemon}`, dataBody, config);
@@ -102,6 +110,12 @@ export const updateUserPokemon = (pokemon) => {
 export const deleteUserPokemon = (pokemonId) => {
 	return async function (dispatch) {
 		dispatch(loaderOn());
+
+		const token = localStorage.getItem('auth_token');
+
+		const config = {
+			headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+		};
 
 		try {
 			await axios.delete(`${base}/${endpoints.pokemon}/${pokemonId}`, config);

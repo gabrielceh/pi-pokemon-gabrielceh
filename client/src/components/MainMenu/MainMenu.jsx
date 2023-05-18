@@ -74,6 +74,7 @@ function MainMenu() {
 				{isOpenConfig && (
 					<ConfigMenu
 						className='animation-gelatine'
+						id='config-menu'
 						darkMode={darkMode}>
 						<BtnDark />
 						{!user.access && (

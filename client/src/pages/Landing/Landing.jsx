@@ -9,8 +9,16 @@ function Landing() {
 		<Div className='animation-move-up '>
 			<ContainerStyled>
 				<Flex>
-					<SectionTitle>
-						<Title>PokedexApi by @Gabrielcehu</Title>
+					<SectionTitle className='animation-gelatine-2'>
+						<Title>
+							PokedexApi by{' '}
+							<a
+								href='https://www.linkedin.com/in/gabriel-cervantes-hurtado/'
+								target='_blank'
+								rel='noreferrer'>
+								@Gabrielcehu
+							</a>
+						</Title>
 
 						<Link
 							to={ROUTES_NAMES.HOME}
@@ -18,7 +26,7 @@ function Landing() {
 							HOME
 						</Link>
 					</SectionTitle>
-					<SectionImage>
+					<SectionImage className='animation-bounce-in-2'>
 						<img
 							src={pikachuImg}
 							alt='pikachu'

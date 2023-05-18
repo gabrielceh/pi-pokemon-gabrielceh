@@ -7,4 +7,5 @@ export const ROUTES_NAMES = Object.freeze({
 	ABOUT: '/about',
 	DETAIL: '/detail',
 	ADD: '/add',
+	EDIT: '/edit',
 });

@@ -1,11 +1,9 @@
 /* eslint-disable react/prop-types */
 
-import { ROUTES_NAMES } from '../../utils/routes_name';
-import { useSelector } from 'react-redux';
-import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { ROUTES_NAMES } from '../../utils/routes_name';
 import { useModal } from '../../hooks/useModal';
-import ImageCard from './ImageCard';
 import { typesIcons } from '../../utils/pokemonTypesImages';
 import unknownPokemon from '../../assets/img/pokemon-unknown.png';
 import {
@@ -15,23 +13,19 @@ import {
 	PokemonInfo,
 	TypeImg,
 	TypesSection,
+	UserContainer,
 	UserSpan,
 } from './Card.styled';
-import { useState } from 'react';
+import DeleteIcon from '../Icons/DeleteICon';
+import EditIcon from '../Icons/EditIcon';
+import ImageCard from './ImageCard';
+import ModalDelete from '../EditDeleteMenu/ModalDelete';
+import { deleteUserPokemon } from '../../redux/actions/pokemonUser.action';
+import { ButtonCard } from '../../styled/Button.styled';
 
 function Card({ pokemon = {}, onClose = null }) {
 	let { id, name, image, Types } = pokemon;
-	const [pos, setPos] = useState({});
-
-	const handleMousePosition = (event) => {
-		const viewport = window.innerWidth;
-
-		if (event.clientX / viewport < 0.3) {
-			setPos({
-				posX: event.clientX,
-			});
-		}
-	};
+	const [isOpenDelete, openModalDelete, closeModalDelete] = useModal();
 
 	const imagePk = image || unknownPokemon;
 
@@ -40,21 +34,39 @@ function Card({ pokemon = {}, onClose = null }) {
 	const userPokemon = pokemon?.Users ? pokemon.Users[0] : null;
 	const user = useSelector((state) => state.user);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const handleMouseEnter = () => {
-		event.stopPropagation();
 		openImg();
 	};
 	const handleMouseLeave = () => {
-		event.stopPropagation();
 		closeImg();
 	};
 
 	const handleClick = () => {
-		if (onClose !== null) {
+		if (onClose) {
 			onClose();
-			navigate(`${ROUTES_NAMES.DETAIL}/${id}`);
 		}
+		navigate(`${ROUTES_NAMES.DETAIL}/${id}`);
+	};
+
+	const handleDelete = (event) => {
+		event.preventDefault();
+		dispatch(deleteUserPokemon(id));
+	};
+
+	const handleEdit = (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+
+		navigate(`${ROUTES_NAMES.EDIT}/${id}`);
+	};
+
+	const handleOpenModalDetete = (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+
+		openModalDelete();
 	};
 
 	return (
@@ -65,7 +77,6 @@ function Card({ pokemon = {}, onClose = null }) {
 					className='animation-move-up'
 					onMouseEnter={handleMouseEnter}
 					onMouseLeave={handleMouseLeave}
-					onMouseMove={handleMousePosition}
 					onClick={handleClick}>
 					<PokemonInfo>
 						<LinkStyled to={`${ROUTES_NAMES.DETAIL}/${id}`}>
@@ -81,26 +92,46 @@ function Card({ pokemon = {}, onClose = null }) {
 										alt={type.name}
 									/>
 								))}
-
-							{location.pathname === ROUTES_NAMES.PROFILE &&
-								userPokemon?.userName === user?.user.userName && (
-									<EditDeleteMenu
-										pokemonId={id}
-										pokemonName={name}
-									/>
-								)}
 						</TypesSection>
 						{isOpenImg && (
 							<ImageCard
 								srcImg={imagePk}
 								altImg={name}
-								pos={pos}
+								type={Types[0].name}
 							/>
 						)}
 					</PokemonInfo>
 
-					{userPokemon && <UserSpan>Created by {userPokemon.userName}</UserSpan>}
+					{userPokemon && (
+						<UserContainer>
+							<UserSpan>Created by {userPokemon.userName}</UserSpan>
+							{location.pathname === ROUTES_NAMES.PROFILE &&
+								userPokemon?.userName === user?.user.userName && (
+									<div>
+										<ButtonCard
+											type={Types[0].name}
+											onClick={handleOpenModalDetete}>
+											<DeleteIcon />
+										</ButtonCard>
+										<ButtonCard
+											type={Types[0].name}
+											onClick={handleEdit}>
+											<EditIcon />
+										</ButtonCard>
+									</div>
+								)}
+						</UserContainer>
+					)}
 				</CardContainer>
+			)}
+
+			{isOpenDelete && (
+				<ModalDelete
+					closeModal={closeModalDelete}
+					onAccept={handleDelete}
+					pokemonName={name}
+					pokemonId={id}
+				/>
 			)}
 		</>
 	);

@@ -64,6 +64,13 @@ export const TypeImg = styled.img`
 	height: auto;
 `;
 
+export const UserContainer = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+`;
+
 export const UserSpan = styled.span`
 	color: ${({ theme }) => theme.colors.slate['300']};
 `;

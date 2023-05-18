@@ -2,12 +2,19 @@ import styled from 'styled-components';
 
 export const InputGroup = styled.div`
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+
 	gap: 1rem;
 
-	& div {
-		width: 50%;
+	@media (${({ theme }) => theme.screenSize.tablet}) {
+		justify-content: space-between;
+		flex-direction: row;
+
+		& div {
+			width: 50%;
+		}
 	}
 `;
 
@@ -21,18 +28,35 @@ export const InputContainer = styled.div`
 
 export const Label = styled.label`
 	font-size: ${({ theme }) => theme.fontSize.sm};
-	color: ${({ theme }) => theme.colors.slate['500']};
+	font-weight: 700;
+	color: ${({ theme, darkMode }) =>
+		darkMode === 'light' ? theme.colors.slate['600'] : theme.colors.slate['300']};
 	letter-spacing: 0.1rem;
 `;
 
 export const Input = styled.input`
+	width: 100%;
 	padding: 0.7rem 0.5rem;
 	outline: none;
 	border-radius: 5px;
 	border: ${({ theme, error }) =>
-		!error ? `2px solid ${theme.colors.darkBlue['200']}` : `2px solid ${theme.colors.red['200']}`};
-	color: ${({ theme, error }) => (error ? theme.colors.red['200'] : theme.text)};
+		!error ? `2px solid ${theme.colors.darkBlue['200']}` : `2px solid ${theme.colors.red['400']}`};
 	font-size: ${({ theme }) => theme.fontSize.lg};
+	color: ${({ theme, darkMode }) =>
+		darkMode === 'light' ? theme.colors.darkBlue['900'] : theme.colors.darkBlue['50']};
+	background-color: ${({ theme, darkMode }) =>
+		darkMode === 'light' ? theme.colors.darkBlue['50'] : theme.colors.darkBlue['900']};
+
+	transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+
+	&[type='range'] {
+		width: '100%';
+		height: '10px';
+		appearance: 'none';
+		background-color: 'gray';
+		outline: 'none';
+		padding: 0;
+	}
 `;
 
 export const ImageInput = styled.input``;

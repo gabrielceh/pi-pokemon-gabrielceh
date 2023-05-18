@@ -1,16 +1,18 @@
 import { Routes, Route } from 'react-router-dom';
 import { ROUTES_NAMES } from '../utils/routes_name';
-import PublicRoutes from './PublicRoutes';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
-import Page404 from '../pages/Page404';
+import Login from '../pages/Login/Login';
+import Register from '../pages/Register/Register';
+import Page404 from '../pages/Page404/Page404';
 import Landing from '../pages/Landing/Landing';
 import Home from '../pages/Home/Home';
 import Detail from '../pages/Detail/Detail';
-import GeneralRoutes from './GeneralRoutes';
+import Profile from '../pages/Profile/Profile';
 import Add from '../pages/Add/Add';
+import EditPokemon from '../pages/EditPokemon/EditPokemon';
+import PublicRoutes from './PublicRoutes';
+import GeneralRoutes from './GeneralRoutes';
 import ProtectedRouted from './ProtectedRouted';
-import Profile from '../pages/Profile';
+import MainLayout from '../components/MainLayout/MainLayout';
 
 function AppRouter() {
 	return (
@@ -56,11 +58,19 @@ function AppRouter() {
 					path={ROUTES_NAMES.PROFILE}
 					element={<Profile />}
 				/>
+				<Route
+					path={`${ROUTES_NAMES.EDIT}/:id`}
+					element={<EditPokemon />}
+				/>
 			</Route>
 
 			<Route
 				path='*'
-				element={<Page404 />}
+				element={
+					<MainLayout>
+						<Page404 />
+					</MainLayout>
+				}
 			/>
 		</Routes>
 	);

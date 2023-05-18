@@ -39,6 +39,46 @@ input {
 	font-weight: 500;
 }
 
+.notification-container {
+	font-size: 14px;
+	box-sizing: border-box;
+	position: fixed;
+	z-index: 10;
+	width: fit-content;
+	height: fit-content;
+}
+
+.notification-container.top-right {
+	top: 24px;
+	right: 24px;
+	transition: transform 0.6s ease-in-out;
+	animation: toast-in-right 0.7s;
+}
+
+.notification-container.bottom-right {
+	bottom: 24px;
+	right: 24px;
+	transition: transform 0.6s ease-in-out;
+	animation: toast-in-right 0.7s;
+}
+
+.notification-container.top-left {
+	top: 24px;
+	left: 24px;
+	transition: transform 0.6s ease-in;
+	animation: toast-in-left 0.7s;
+}
+
+.notification-container.bottom-left {
+	bottom: 24px;
+	left: 24px;
+}
+.notification-container.top-center {
+	top: 24px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
 .animation-move-up {
 	animation-name: animation-move-up;
 	animation-timing-function: ease-in-out;
@@ -151,5 +191,43 @@ input {
 	}
 	75% {
 		transform: scale(0.95, 1.05);
+	}
+}
+.animation-gelatine-2 {
+	animation: gelatine-2 0.5s 1;
+}
+@keyframes gelatine-2 {
+	from,
+	to {
+		transform: scale(1, 1);
+	}
+	25% {
+		transform: scale(0.9, 1.1);
+	}
+	50% {
+		transform: scale(1.1, 0.9);
+	}
+	75% {
+		transform: scale(0.95, 1.05);
+	}
+}
+
+.animation-bounce-in-2 {
+	animation: bounce-in-2 1.5s ease 1;
+}
+@keyframes bounce-in-2 {
+	0% {
+		opacity: 0;
+		transform: scale(0.3);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.05);
+	}
+	70% {
+		transform: scale(0.9);
+	}
+	100% {
+		transform: scale(1);
 	}
 }

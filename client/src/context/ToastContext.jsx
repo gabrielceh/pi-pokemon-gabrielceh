@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext, useState } from 'react';
 
 export const ToastContext = createContext();
@@ -5,7 +6,7 @@ export const ToastContext = createContext();
 const ToastProvider = ({ children }) => {
 	const [toastList, setToastList] = useState([]);
 
-	const addToast = (toast) => {
+	const addToast = (toast = { title: '', description: '', type: '' }) => {
 		toast.id = crypto.randomUUID();
 		if (toastList.length >= 3) {
 			const newList = [...toastList];

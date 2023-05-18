@@ -1,62 +1,44 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiErrorReset, apiErrorSet } from '../../redux/actions/apieError.actions';
-import { getTypes } from '../../redux/actions/types.actions';
-import { createUserPokemon, resetSuccessPokemonUser } from '../../redux/actions/pokemonUser.action';
-import { getUrlFromImage } from '../../utils/getUrlFromImage';
+import { resetSuccessPokemonUser, updateUserPokemon } from '../../redux/actions/pokemonUser.action';
+
+import { apiErrorReset } from '../../redux/actions/apieError.actions';
+import { imageTypes, validateEdit } from '../../utils/validateForms';
 import { getImageToShow } from '../../utils/showImage';
-import { imageTypes, validateCreateForm } from '../../utils/validateForms';
-import { InputGroup } from '../Inputs/Input.styled';
+import { getUrlFromImage } from '../../utils/getUrlFromImage';
+import InputForm from '../Inputs/InputForm';
 import InputImage from '../Inputs/InputImage';
+import { InputGroup } from '../Inputs/Input.styled';
 import MultipleSelect from '../Inputs/MultipleSelect';
 import { ButtonForm } from '../../styled/Button.styled';
 import { Form } from '../../styled/Form.styled';
-import InputForm from '../Inputs/InputForm';
 
-const initialForm = {
-	name: '',
-	hp: '1',
-	attack: '1',
-	defense: '1',
-	special_attack: '1',
-	special_defense: '1',
-	speed: '1',
-	weight: '1',
-	height: '1',
-	types: [],
-};
-function FormCreate() {
-	const [form, setForm] = useState(initialForm);
-	const [base64ToShow, setBase64ToShow] = useState(null);
+function EditPokemonForm({ formPokemon, typesPokemon }) {
+	const [form, setForm] = useState(formPokemon);
+	const [urlImageToShow, seturlImageToShow] = useState(null);
 	const [errors, setErrors] = useState({});
+
 	const formImage = document.getElementById('formImage');
-	const navigate = useNavigate();
 
 	const dispatch = useDispatch();
-	const typesPokemon = useSelector((state) => state.typesPokemon);
-	const pokemonUser = useSelector((state) => state.pokemonUser);
 
 	const loading = useSelector((state) => state.loading);
 
 	useEffect(() => {
-		if (!typesPokemon.length) {
-			dispatch(getTypes());
+		seturlImageToShow(formPokemon.image ? formPokemon.image : null);
+		if (formPokemon.image) {
+			setForm({
+				...form,
+				image: formPokemon.image,
+			});
 		}
+
 		return () => {
 			dispatch(apiErrorReset());
 			dispatch(resetSuccessPokemonUser());
 		};
 	}, []);
-
-	useEffect(() => {
-		if (!pokemonUser?.success) {
-			return;
-		}
-		let id = pokemonUser.results[0].id;
-
-		navigate(`/detail/${id}`);
-	}, [pokemonUser]);
 
 	const handleInputChange = (event) => {
 		const nameInput = event.target.name;
@@ -65,8 +47,9 @@ function FormCreate() {
 			...form,
 			[nameInput]: value,
 		});
+
 		setErrors(
-			validateCreateForm({
+			validateEdit({
 				...form,
 				[nameInput]: value,
 			})
@@ -92,7 +75,7 @@ function FormCreate() {
 			types: value,
 		});
 		setErrors(
-			validateCreateForm({
+			validateEdit({
 				...form,
 				types: value,
 			})
@@ -106,13 +89,13 @@ function FormCreate() {
 				image: 'Invalid format. Only: .png, .jpg, .svg, .webp',
 			});
 			formImage.value = '';
-			return setBase64ToShow(null);
+			return seturlImageToShow(formPokemon.image);
 		}
 		const url = await getImageToShow(event.target.files[0]);
-		setBase64ToShow(url);
+		seturlImageToShow(url);
 
 		setErrors(
-			validateCreateForm({
+			validateEdit({
 				...form,
 				...errors,
 				image: event.target.files[0],
@@ -120,34 +103,29 @@ function FormCreate() {
 		);
 	};
 
-	const handleOnCloseImage = (event) => {
-		event.preventDefault();
+	const handleOnCloseImage = () => {
 		formImage.value = '';
-		setBase64ToShow(null);
+		seturlImageToShow(null);
 	};
 
-	const handleSubmit = async (event) => {
-		event.preventDefault();
-
+	const handleSubmit = async () => {
 		for (let error in errors) {
-			if (errors[error]) return dispatch(apiErrorSet(`${errors[error]}`));
+			if (errors[error]) return window.alert(`${errors[error]}`);
 		}
 
 		let getUrl = '';
-		if (formImage.files.length) {
-			getUrl = await getUrlFromImage(base64ToShow);
+		if (urlImageToShow && formImage.value) {
+			console.log('go');
+			getUrl = await getUrlFromImage(urlImageToShow);
 		}
 
-		dispatch(createUserPokemon({ ...form, image: getUrl }));
+		dispatch(updateUserPokemon({ ...form, image: getUrl || form.image }));
 	};
-
 	return (
-		<Form
-			action=''
-			onSubmit={handleSubmit}>
-			<h1>Create your Pokémon!!</h1>
+		<Form onSubmit={handleSubmit}>
+			<h2>Edit {formPokemon.name}</h2>
 			<InputForm
-				label='My Pókemon name'
+				label='My Pokémon name'
 				type='text'
 				name='name'
 				value={form.name}
@@ -159,12 +137,11 @@ function FormCreate() {
 				label='My Pokémon image'
 				name='formImage'
 				onchange={handleImageChange}
-				src={base64ToShow}
+				src={urlImageToShow}
 				closeImg={handleOnCloseImage}
 				alt={form.name}
 				error={errors.image}
 			/>
-
 			<InputGroup>
 				<InputForm
 					label={`My Pókemon HP: ${form.hp}`}
@@ -256,7 +233,6 @@ function FormCreate() {
 					max={999}
 				/>
 			</InputGroup>
-
 			{loading ? (
 				<div>Loading</div>
 			) : (
@@ -271,12 +247,12 @@ function FormCreate() {
 			)}
 
 			<ButtonForm
-				className='create'
-				disabled={loading || Object.keys(errors).length ? true : false}>
-				send
+				className='edit'
+				disabled={loading}>
+				Edit
 			</ButtonForm>
 		</Form>
 	);
 }
 
-export default FormCreate;
+export default EditPokemonForm;

@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserPokemon } from '../redux/actions/pokemonUser.action';
-import Cards from '../components/Cards/Cards';
+import { getUserPokemon } from '../../redux/actions/pokemonUser.action';
+import Cards from '../../components/Cards/Cards';
+import { ContainerPage } from '../../styled/Container.styled';
 
 function Profile() {
 	const dispatch = useDispatch();
@@ -12,14 +13,13 @@ function Profile() {
 		if (!pokemonUser.results.length) {
 			dispatch(getUserPokemon(user.user.userId));
 		}
-		console.log(pokemonUser);
 	}, []);
 
 	return (
-		<div>
+		<ContainerPage>
 			<h2>{user.user.userName}</h2>
 			<Cards data={pokemonUser.results} />
-		</div>
+		</ContainerPage>
 	);
 }
 
