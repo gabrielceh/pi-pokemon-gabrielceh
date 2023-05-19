@@ -6,7 +6,7 @@ export const Modalstyled = styled.div`
 	position: fixed;
 	top: 0;
 	left: 0;
-	background-color: ${({ theme }) => `${theme.colors.darkBlue[800]}cc`};
+	background-color: ${({ theme }) => `${theme.colors.darkBlue[800]}99`};
 	backdrop-filter: blur(5px);
 	z-index: 10;
 	display: flex;

@@ -19,8 +19,13 @@ export const ContainerPage = styled.div`
 	margin: 0 auto;
 
 	&.detail {
+		/* min-height: 120vh; */
 		background-color: ${({ theme, type }) =>
 			type === undefined ? theme.body : theme.pokemonColors[type].light};
+
+		@media (${({ theme }) => theme.screenSize.tablet}) {
+			min-height: 100vh;
+		}
 	}
 
 	@media ${({ theme }) => theme.screenSize.tablet} {

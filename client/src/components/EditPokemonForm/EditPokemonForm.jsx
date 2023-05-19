@@ -13,6 +13,7 @@ import { InputGroup } from '../Inputs/Input.styled';
 import MultipleSelect from '../Inputs/MultipleSelect';
 import { ButtonForm } from '../../styled/Button.styled';
 import { Form } from '../../styled/Form.styled';
+import { useNavigate } from 'react-router-dom';
 
 function EditPokemonForm({ formPokemon, typesPokemon }) {
 	const [form, setForm] = useState(formPokemon);
@@ -20,10 +21,21 @@ function EditPokemonForm({ formPokemon, typesPokemon }) {
 	const [errors, setErrors] = useState({});
 
 	const formImage = document.getElementById('formImage');
+	const navigate = useNavigate();
 
 	const dispatch = useDispatch();
 
 	const loading = useSelector((state) => state.loading);
+	const pokemonUser = useSelector((state) => state.pokemonUser);
+
+	useEffect(() => {
+		if (!pokemonUser?.success) {
+			return;
+		}
+		let id = pokemonUser.results[0].id;
+
+		navigate(`/detail/${id}`);
+	}, [pokemonUser]);
 
 	useEffect(() => {
 		seturlImageToShow(formPokemon.image ? formPokemon.image : null);
@@ -249,7 +261,7 @@ function EditPokemonForm({ formPokemon, typesPokemon }) {
 			<ButtonForm
 				className='edit'
 				disabled={loading}>
-				Edit
+				{loading ? 'Loading...' : 'Edit'}
 			</ButtonForm>
 		</Form>
 	);

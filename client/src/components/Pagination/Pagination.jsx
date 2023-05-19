@@ -1,6 +1,9 @@
 /* eslint-disable react/prop-types */
 import ButtonPagination from './ButtonPagination';
 import { base } from '../../utils/endpoints';
+import RightArrow from '../Icons/RightArrow';
+import LeftArrow from '../Icons/LeftArrow';
+import { ButtonsNumbers, PagContainer } from './Pagination.styled';
 
 // eslint-disable-next-line react/prop-types
 function Pagination({
@@ -35,13 +38,14 @@ function Pagination({
 
 		for (let i = 1; i <= totalPages; i++) {
 			pageNumbers.push(
-				<button
+				<ButtonsNumbers
 					key={i}
 					onClick={() => handleClick(i)}
+					className={currentPage === i ? 'focus' : ''}
 					disabled={currentPage === i}
-					className={currentPage === i ? 'active' : ''}>
+					label={i}>
 					{i}
-				</button>
+				</ButtonsNumbers>
 			);
 		}
 
@@ -49,27 +53,27 @@ function Pagination({
 	};
 
 	return (
-		<div className='pagination'>
+		<PagContainer className='pagination'>
 			<ButtonPagination
 				handleClick={() => handleClick(1)}
-				label='First page'
+				label='1...'
 			/>
 			<ButtonPagination
 				handleClick={() => handleClick(currentPage - 1)}
 				disabled={prev ? false : true}
-				label={'Anterior'}
+				label={<LeftArrow />}
 			/>
 			{renderPageNumbers()}
 			<ButtonPagination
 				handleClick={() => handleClick(currentPage + 1)}
 				disabled={next ? false : true}
-				label={'Siguiente'}
+				label={<RightArrow />}
 			/>
 			<ButtonPagination
 				handleClick={() => handleClick(totalPages)}
-				label='Last Page'
+				label={`...${totalPages}`}
 			/>
-		</div>
+		</PagContainer>
 	);
 }
 

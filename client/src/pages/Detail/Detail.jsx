@@ -9,6 +9,7 @@ import { base, endpoints } from '../../utils/endpoints';
 import DetailComponent from '../../components/DetailComponent/DetailComponent';
 import { ContainerPage } from '../../styled/Container.styled';
 import { ErrorMsg } from './Detail.styled';
+import LoadingPage from '../../components/Loading/LoadingPage';
 
 function Detail() {
 	const [pokemon, setPokemon] = useState(null);
@@ -38,7 +39,7 @@ function Detail() {
 
 	return (
 		<>
-			{loading && <p>Loading...</p>}
+			{loading && <LoadingPage />}
 			{!loading && pokemon && (
 				<ContainerPage
 					className='detail animation-fade-in'
@@ -49,7 +50,12 @@ function Detail() {
 					/>
 				</ContainerPage>
 			)}
-			{error && <ErrorMsg>{error}</ErrorMsg>}
+
+			{error && (
+				<ContainerPage>
+					<ErrorMsg>{error}</ErrorMsg>
+				</ContainerPage>
+			)}
 		</>
 	);
 }

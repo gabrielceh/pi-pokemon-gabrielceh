@@ -49,6 +49,7 @@ const getPokemonById = async (req, res) => {
 
 		throw new CustomError(400, `Pokemon with id "${id}" is not on data base`);
 	} catch (error) {
+		console.log(error);
 		const status = error.status || 500;
 		res.status(status).json({ error: error.message });
 	}

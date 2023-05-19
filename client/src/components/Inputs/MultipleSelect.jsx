@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 
-import { ErrorMsg, InputContainer, Label } from './Input.styled';
+import { ErrorMsg, InputContainer, Label, MultiSelect } from './Input.styled';
 
 function MultipleSelect({ label, name, defaultValue, onchange, data = [], error }) {
 	return (
 		<InputContainer>
 			<Label htmlFor={name}>{label}</Label>
-			<select
+			<MultiSelect
 				name={name}
 				id={name}
 				defaultValue={defaultValue}
@@ -20,7 +20,7 @@ function MultipleSelect({ label, name, defaultValue, onchange, data = [], error 
 							{type.name}
 						</option>
 					))}
-			</select>
+			</MultiSelect>
 			{error ? <ErrorMsg>{error}</ErrorMsg> : <ErrorMsg> </ErrorMsg>}
 		</InputContainer>
 	);

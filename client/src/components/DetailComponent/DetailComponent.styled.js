@@ -6,7 +6,7 @@ export const ContainerDetail = styled.article`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	gap: 3rem;
+	gap: 2rem;
 
 	@media (${({ theme }) => theme.screenSize.tablet}) {
 		max-width: 1280px;
@@ -78,7 +78,7 @@ export const Divider = styled.div`
 
 	@media (${({ theme }) => theme.screenSize.tablet}) {
 		height: 100%;
-		min-height: 300px;
+		min-height: 250px;
 		width: 1px;
 		margin: 0rem 1rem;
 	}
@@ -102,7 +102,6 @@ export const InfoArticle = styled.article`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 1.5rem 0;
 
 	@media (${({ theme }) => theme.screenSize.tablet}) {
 		display: block;
@@ -155,6 +154,7 @@ export const TypeName = styled.p`
 
 export const InfoLabel = styled.p`
 	text-align: right;
+	margin: 0.2rem auto;
 
 	&::selection {
 		color: ${({ theme, type }) => theme.pokemonColors[type].light};

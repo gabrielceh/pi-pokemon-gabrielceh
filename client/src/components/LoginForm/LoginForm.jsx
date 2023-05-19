@@ -88,7 +88,7 @@ function LoginForm() {
 					className='login'
 					disabled={loading}
 					type='submit'>
-					Login
+					{loading ? 'Loading...' : 'Login'}
 				</ButtonForm>
 				<div>
 					<p>

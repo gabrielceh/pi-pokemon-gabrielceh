@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
 	min-height: 600px;
-	width: 100%;
+	width: 90%;
 	min-width: 300px;
-	max-width: 900px;
+	max-width: 800px;
 	background-color: ${({ theme }) => theme.colors.darkBlue['800']};
 	border-radius: 10px;
 	position: relative;
@@ -14,7 +14,7 @@ export const Container = styled.div`
 
 export const ContainerTop = styled.div`
 	width: 100%;
-	border-bottom: ${({ theme }) => `2px solid ${theme.colors.darkBlue['200']}`};
+	border-bottom: ${({ theme }) => `2px solid ${theme.colors.darkBlue['300']}`};
 	display: flex;
 	flex-direction: column;
 	padding: 2rem;
@@ -44,6 +44,7 @@ export const Result = styled.div`
 	padding: 2rem;
 	background-color: ${({ theme }) => theme.colors.darkBlue['900']};
 	height: 430px;
+	color: ${({ theme }) => theme.colors.slate['100']};
 `;
 
 export const ErrorSearch = styled.p`

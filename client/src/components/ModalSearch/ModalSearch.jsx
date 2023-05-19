@@ -6,6 +6,7 @@ import { Modalstyled } from '../../styled/Modal.styled.js';
 import { Container, ButtonClose, Result, ErrorSearch, ContainerTop } from './ModalSearch.styled.js';
 import FormSearch from '../FormSearch/FormSearch';
 import Card from '../Card/Card';
+import LoadingSearch from '../Loading/LoadingSearch';
 
 /* eslint-disable react/prop-types */
 function ModalSearch({ closeModal }) {
@@ -16,6 +17,7 @@ function ModalSearch({ closeModal }) {
 	const handleSearch = async (search) => {
 		setLoading(true);
 		setError(null);
+		setData(null);
 		try {
 			const { data } = await axios(`${base}/${endpoints.pokemon}?name=${search}`);
 			setData(data);
@@ -33,7 +35,7 @@ function ModalSearch({ closeModal }) {
 					<FormSearch onSearch={handleSearch} />
 				</ContainerTop>
 				<Result>
-					{loading && <p>loading</p>}
+					{loading && <LoadingSearch />}
 					{data && (
 						<div>
 							<p>Result:</p>

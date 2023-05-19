@@ -113,7 +113,7 @@ function RegisterForm() {
 					className='login'
 					disabled={loading}
 					type='submit'>
-					Register
+					{loading ? 'Loading...' : 'Register'}
 				</ButtonForm>
 				<div>
 					<p>

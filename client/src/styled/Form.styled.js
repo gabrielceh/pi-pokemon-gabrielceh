@@ -7,5 +7,5 @@ export const Form = styled.form`
 	padding: 2rem;
 	border: ${({ theme }) => `1px solid ${theme.colors.darkBlue['200']}`};
 	border-radius: 10px;
-	box-shadow: ${({ theme }) => `0px 0px 80px ${theme.colors.darkBlue['700']}`};
+	box-shadow: ${({ theme }) => `0px 0px 10px ${theme.colors.darkBlue['700']}`};
 `;

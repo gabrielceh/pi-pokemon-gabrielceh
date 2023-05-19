@@ -8,7 +8,6 @@ import { typesIcons } from '../../utils/pokemonTypesImages';
 import unknownPokemon from '../../assets/img/pokemon-unknown.png';
 import {
 	CardContainer,
-	LinkStyled,
 	Name,
 	PokemonInfo,
 	TypeImg,
@@ -22,6 +21,8 @@ import ImageCard from './ImageCard';
 import ModalDelete from '../EditDeleteMenu/ModalDelete';
 import { deleteUserPokemon } from '../../redux/actions/pokemonUser.action';
 import { ButtonCard } from '../../styled/Button.styled';
+import { isMobile } from '../../utils/userDeviceInfo';
+import CardsMobile from '../Cards/CardsMobile';
 
 function Card({ pokemon = {}, onClose = null }) {
 	let { id, name, image, Types } = pokemon;
@@ -71,7 +72,15 @@ function Card({ pokemon = {}, onClose = null }) {
 
 	return (
 		<>
-			{pokemon.id && (
+			{isMobile.any() && (
+				<CardsMobile
+					pokemon={pokemon}
+					handleClick={handleClick}
+					handleEdit={handleClick}
+					handleOpenModalDetete={handleOpenModalDetete}
+				/>
+			)}
+			{!isMobile.any() && (
 				<CardContainer
 					type={Types[0].name}
 					className='animation-move-up'
@@ -79,9 +88,7 @@ function Card({ pokemon = {}, onClose = null }) {
 					onMouseLeave={handleMouseLeave}
 					onClick={handleClick}>
 					<PokemonInfo>
-						<LinkStyled to={`${ROUTES_NAMES.DETAIL}/${id}`}>
-							<Name type={Types[0].name}>{name.toUpperCase()}</Name>
-						</LinkStyled>
+						<Name type={Types[0].name}>{`#${id} ${name.toUpperCase()}`}</Name>
 
 						<TypesSection>
 							{Types.length &&

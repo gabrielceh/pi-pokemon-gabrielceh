@@ -87,10 +87,10 @@ const getPokemonByTypesAPIList = (typeId, pokemonList = [], orderby, ordertype) 
 const getTypes = async (req, res) => {
 	try {
 		const allTypes = await Types.findAll();
-		const typesFromApi = await getTypesFromApi();
 		let typeToReturn = [];
 
-		if (!allTypes.length || allTypes.length !== typesFromApi.length) {
+		if (!allTypes.length) {
+			const typesFromApi = await getTypesFromApi();
 			const newTypes = await Types.bulkCreate(typesFromApi);
 			typeToReturn = newTypes.map((type) => {
 				return {

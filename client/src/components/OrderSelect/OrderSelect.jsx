@@ -3,6 +3,8 @@ import LetterDescending from '../Icons/LetterDescending';
 import LettersAscending from '../Icons/LettersAscending';
 import NumberAscending from '../Icons/NumbersAscending';
 import NumbersDescending from '../Icons/NumbersDescending';
+import ResetICon from '../Icons/ResetIcon';
+import { ButtonGroup, ButtonOrder, ContButtons, ContDiv, LabelGroup } from './OrderSelect.styled';
 
 const orderByOption = {
 	name: 'name',
@@ -28,36 +30,54 @@ function OrderSelect({ handleOrder, resetOrder, orderPag }) {
 	};
 
 	return (
-		<div>
-			<section>
-				<span>Name</span>
-				<button
-					disabled={handleDisabled(orderByOption.name, orderTypeOptions.asc)}
-					onClick={() => handleOrder(orderByOption.name, orderTypeOptions.asc)}>
-					<LettersAscending />
-				</button>
-				<button
-					disabled={handleDisabled(orderByOption.name, orderTypeOptions.desc)}
-					onClick={() => handleOrder(orderByOption.name, orderTypeOptions.desc)}>
-					<LetterDescending />
-				</button>
-			</section>
+		<ContDiv>
+			<ContButtons>
+				<LabelGroup>Name</LabelGroup>
+				<ButtonGroup>
+					<ButtonOrder
+						title='Asc. name'
+						disabled={handleDisabled(orderByOption.name, orderTypeOptions.asc)}
+						onClick={() => handleOrder(orderByOption.name, orderTypeOptions.asc)}>
+						<LettersAscending />
+					</ButtonOrder>
+					<ButtonOrder
+						title='Desc. name'
+						disabled={handleDisabled(orderByOption.name, orderTypeOptions.desc)}
+						onClick={() => handleOrder(orderByOption.name, orderTypeOptions.desc)}>
+						<LetterDescending />
+					</ButtonOrder>
+				</ButtonGroup>
+			</ContButtons>
 
-			<section>
-				<span>Attack</span>
-				<button
-					disabled={handleDisabled(orderByOption.attack, orderTypeOptions.asc)}
-					onClick={() => handleOrder(orderByOption.attack, orderTypeOptions.asc)}>
-					<NumberAscending />
-				</button>
-				<button
-					disabled={handleDisabled(orderByOption.attack, orderTypeOptions.desc)}
-					onClick={() => handleOrder(orderByOption.attack, orderTypeOptions.desc)}>
-					<NumbersDescending />
-				</button>
-			</section>
-			<button onClick={resetOrder}>Reset order</button>
-		</div>
+			<ContButtons>
+				<LabelGroup>Attack</LabelGroup>
+				<ButtonGroup>
+					<ButtonOrder
+						title='Asc. attack'
+						disabled={handleDisabled(orderByOption.attack, orderTypeOptions.asc)}
+						onClick={() => handleOrder(orderByOption.attack, orderTypeOptions.asc)}>
+						<NumberAscending />
+					</ButtonOrder>
+					<ButtonOrder
+						title='Desc. attack'
+						disabled={handleDisabled(orderByOption.attack, orderTypeOptions.desc)}
+						onClick={() => handleOrder(orderByOption.attack, orderTypeOptions.desc)}>
+						<NumbersDescending />
+					</ButtonOrder>
+				</ButtonGroup>
+			</ContButtons>
+
+			<ContButtons>
+				<LabelGroup>Reset</LabelGroup>
+				<ButtonGroup>
+					<ButtonOrder
+						title='Reset Order'
+						onClick={resetOrder}>
+						<ResetICon />
+					</ButtonOrder>
+				</ButtonGroup>
+			</ContButtons>
+		</ContDiv>
 	);
 }
 

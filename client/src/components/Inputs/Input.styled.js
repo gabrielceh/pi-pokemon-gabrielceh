@@ -104,3 +104,19 @@ export const BtnCloseImg = styled.button`
 		stroke: ${({ theme }) => theme.colors.darkBlue['500']};
 	}
 `;
+
+export const MultiSelect = styled.select`
+	padding: 0.2rem 1rem;
+	height: 120px;
+	font-size: ${({ theme }) => theme.fontSize.lg};
+	border: ${({ theme }) => `2px solid ${theme.colors.darkBlue['300']}`};
+	border-radius: 5px;
+	background-color: ${({ theme }) => theme.body};
+	color: ${({ theme }) => theme.text};
+	transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, border 0.3s ease-in-out;
+
+	&:focus {
+		outline: none;
+		border: ${({ theme }) => `2px solid ${theme.colors.darkBlue['600']}`};
+	}
+`;

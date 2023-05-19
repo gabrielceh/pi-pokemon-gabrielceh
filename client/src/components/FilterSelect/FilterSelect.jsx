@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { apiErrorReset, apiErrorSet } from '../../redux/actions/apieError.actions';
 import { loaderOn, loaderOff } from '../../redux/actions/loading.actions';
 import { base, endpoints } from '../../utils/endpoints';
+import { Form, LabelGroup, Select } from '../../styled/HeaderHome.js';
 
 function FilterSelect({ setEnpoint, setCurrentPage, setOrderPag }) {
 	const [dataSelect, setDataSelect] = useState([]);
@@ -54,9 +55,9 @@ function FilterSelect({ setEnpoint, setCurrentPage, setOrderPag }) {
 			{loading ? (
 				<p>loading</p>
 			) : (
-				<form>
-					<span>Types: </span>
-					<select
+				<Form>
+					<LabelGroup>Types: </LabelGroup>
+					<Select
 						name='type'
 						id=''
 						onChange={handleChange}
@@ -69,8 +70,8 @@ function FilterSelect({ setEnpoint, setCurrentPage, setOrderPag }) {
 								{type.name}
 							</option>
 						))}
-					</select>
-				</form>
+					</Select>
+				</Form>
 			)}
 		</div>
 	);

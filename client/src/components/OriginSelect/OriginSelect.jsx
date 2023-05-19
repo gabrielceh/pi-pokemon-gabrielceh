@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { endpoints } from '../../utils/endpoints';
+import { Form, LabelGroup, Select } from '../../styled/HeaderHome';
 
 function OriginSelect({ setEnpoint, setCurrentPage, setOrderPag }) {
 	const [form, setForm] = useState({
@@ -28,9 +29,9 @@ function OriginSelect({ setEnpoint, setCurrentPage, setOrderPag }) {
 
 	return (
 		<div>
-			<form>
-				<span>Origin</span>
-				<select
+			<Form>
+				<LabelGroup>Origin</LabelGroup>
+				<Select
 					name='type'
 					id=''
 					onChange={handleChange}
@@ -38,8 +39,8 @@ function OriginSelect({ setEnpoint, setCurrentPage, setOrderPag }) {
 					<option value='all'>All origin</option>
 					<option value='original'>Original Pokémon</option>
 					<option value='users'>Users Pokémon</option>
-				</select>
-			</form>
+				</Select>
+			</Form>
 		</div>
 	);
 }

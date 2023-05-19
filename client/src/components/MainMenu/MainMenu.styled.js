@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const MenuBar = styled.nav`
 	position: fixed;
-	z-index: 1;
+	z-index: 5;
 	background-color: ${({ theme }) => theme.body};
 	width: 100%;
 	bottom: 0;

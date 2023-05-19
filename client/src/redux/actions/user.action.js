@@ -77,9 +77,6 @@ export const logout = () => {
 			await axios.get(`${endpoints.logout}`, optins);
 			localStorage.removeItem('auth_token');
 			window.location.reload();
-			dispatch({
-				type: LOGOUT,
-			});
 		} catch (error) {
 			console.log('user.actions error:', error);
 			dispatch(apiErrorSet(error.response?.data?.error));

@@ -11,7 +11,9 @@ import Cards from '../../components/Cards/Cards';
 import OrderSelect from '../../components/OrderSelect/OrderSelect';
 import FilterSelect from '../../components/FilterSelect/FilterSelect';
 import OriginSelect from '../../components/OriginSelect/OriginSelect';
-import { ContainerPage } from '../../styled/Container.styled';
+import { ContainerPage, ContainerStyled } from '../../styled/Container.styled';
+import { OptionsContainer, SelectsCont } from './Home.styled';
+import LoadingPage from '../../components/Loading/LoadingPage';
 
 function Home() {
 	const [data, setData] = useState([]);
@@ -25,10 +27,12 @@ function Home() {
 	const limit = 12;
 
 	const loading = useSelector((state) => state.loading);
+	const apiError = useSelector((state) => state.apiError);
 	const dispatch = useDispatch();
 
 	const fetchPokemonList = async (url) => {
 		dispatch(loaderOn());
+		setData([]);
 		try {
 			const { data } = await axios.get(url);
 			setData(data.results);
@@ -50,7 +54,6 @@ function Home() {
 	}, [endPointPag]);
 
 	const handleOrder = (orderby, ordertype) => {
-		console.log(orderby);
 		setOrderPag({
 			orderby,
 			ordertype,
@@ -61,51 +64,68 @@ function Home() {
 	};
 
 	const resetOrder = () => {
-		setOrderPag(null);
-		setCurrentPage(1);
-		const pag = `?offset=0&limit=${limit}`;
-		fetchPokemonList(`${base}/${endPointPag}/${pag}`);
+		if (orderPag) {
+			setOrderPag(null);
+			setCurrentPage(1);
+			const pag = `?offset=0&limit=${limit}`;
+			fetchPokemonList(`${base}/${endPointPag}/${pag}`);
+		}
 	};
 
 	return (
 		<ContainerPage>
-			<h2>Home</h2>
+			<ContainerStyled>
+				<OptionsContainer>
+					<OrderSelect
+						handleOrder={handleOrder}
+						resetOrder={resetOrder}
+						orderPag={orderPag}
+					/>
+					<SelectsCont>
+						<FilterSelect
+							setEnpoint={setEndPontPag}
+							setCurrentPage={setCurrentPage}
+							setOrderPag={setOrderPag}
+						/>
 
-			<OrderSelect
-				handleOrder={handleOrder}
-				resetOrder={resetOrder}
-				orderPag={orderPag}
-			/>
-			<FilterSelect
-				setEnpoint={setEndPontPag}
-				setCurrentPage={setCurrentPage}
-				setOrderPag={setOrderPag}
-			/>
+						<OriginSelect
+							setCurrentPage={setCurrentPage}
+							setEnpoint={setEndPontPag}
+							setOrderPag={setOrderPag}
+						/>
+					</SelectsCont>
+				</OptionsContainer>
+			</ContainerStyled>
 
-			<OriginSelect
-				setCurrentPage={setCurrentPage}
-				setEnpoint={setEndPontPag}
-				setOrderPag={setOrderPag}
-			/>
-			{loading ? (
-				<p>loading</p>
-			) : (
+			{loading && <LoadingPage />}
+
+			{data.length && (
 				<>
 					<Cards data={data} />
-					<Pagination
-						fetch={fetchPokemonList}
-						count={count}
-						results={data}
-						endpoint={endPointPag}
-						orderPag={orderPag}
-						setEndPontPag={setEndPontPag}
-						limit={limit}
-						next={next}
-						prev={prev}
-						currentPage={currentPage}
-						setCurrentPage={setCurrentPage}
-					/>
+					<ContainerStyled>
+						<Pagination
+							fetch={fetchPokemonList}
+							count={count}
+							results={data}
+							endpoint={endPointPag}
+							orderPag={orderPag}
+							setEndPontPag={setEndPontPag}
+							limit={limit}
+							next={next}
+							prev={prev}
+							currentPage={currentPage}
+							setCurrentPage={setCurrentPage}
+						/>
+					</ContainerStyled>
 				</>
+			)}
+
+			{!data.length && <h2>No Results</h2>}
+
+			{apiError.error && (
+				<ContainerStyled>
+					<h2>{apiError.error}</h2>
+				</ContainerStyled>
 			)}
 		</ContainerPage>
 	);

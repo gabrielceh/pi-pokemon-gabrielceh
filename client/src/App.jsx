@@ -84,7 +84,7 @@ function App() {
 					<Toast
 						toastList={toastList}
 						deleteToast={deleteToast}
-						position='top-center'
+						position='top-right'
 					/>
 				)}
 			</ThemeProvider>

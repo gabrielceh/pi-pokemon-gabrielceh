@@ -103,7 +103,7 @@ function DetailComponent({ pokemon }) {
 							<Divider type={pokemon.Types[0].name}></Divider>
 
 							<InfoArticle>
-								<LabelArticle type={pokemon.Types[0].name}>INFO</LabelArticle>
+								<LabelArticle type={pokemon.Types[0].name}>MORE</LabelArticle>
 								<div>
 									<LabelInfo
 										label='HEIGHT:'

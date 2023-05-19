@@ -6,18 +6,12 @@ export const Name = styled.h3`
 	color: ${({ theme }) => theme.colors.darkBlue['400']};
 	width: 50%;
 	transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
-
-	&:hover {
-		text-decoration: ${({ theme }) => `3px underline ${theme.colors.darkBlue['200']} wavy`};
-	}
 `;
 
 export const CardContainer = styled.div`
 	cursor: pointer;
 	position: relative;
 	width: 100%;
-	min-width: 250px;
-	max-width: 1440px;
 	height: 100px;
 	margin: 0 auto;
 	padding: 1rem 2rem;

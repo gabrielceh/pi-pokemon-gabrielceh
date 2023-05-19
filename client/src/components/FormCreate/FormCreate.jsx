@@ -257,9 +257,7 @@ function FormCreate() {
 				/>
 			</InputGroup>
 
-			{loading ? (
-				<div>Loading</div>
-			) : (
+			{typesPokemon.length && (
 				<MultipleSelect
 					label='My Pokémon types'
 					name='types'
@@ -272,8 +270,8 @@ function FormCreate() {
 
 			<ButtonForm
 				className='create'
-				disabled={loading || Object.keys(errors).length ? true : false}>
-				send
+				disabled={loading}>
+				{loading ? 'Loading...' : 'Create'}
 			</ButtonForm>
 		</Form>
 	);

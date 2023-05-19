@@ -29,6 +29,7 @@ module.exports = (sequelize) => {
 		hp: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			defaultValue: 1,
 			validate: {
 				min: {
 					args: [1],
@@ -43,6 +44,7 @@ module.exports = (sequelize) => {
 		attack: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			defaultValue: 1,
 			validate: {
 				min: {
 					args: [1],
@@ -57,6 +59,7 @@ module.exports = (sequelize) => {
 		defense: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			defaultValue: 1,
 			validate: {
 				min: {
 					args: [1],
@@ -71,6 +74,7 @@ module.exports = (sequelize) => {
 		special_attack: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			defaultValue: 1,
 			validate: {
 				min: {
 					args: [1],
@@ -85,6 +89,7 @@ module.exports = (sequelize) => {
 		special_defense: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			defaultValue: 1,
 			validate: {
 				min: {
 					args: [1],
@@ -99,6 +104,7 @@ module.exports = (sequelize) => {
 		speed: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			defaultValue: 1,
 			validate: {
 				min: {
 					args: [1],
@@ -113,10 +119,11 @@ module.exports = (sequelize) => {
 		height: {
 			type: {
 				type: DataTypes.FLOAT,
+				defaultValue: 1,
 				validate: {
 					min: {
-						args: [0.01],
-						msg: 'Min height should be 0.01 mts',
+						args: [1],
+						msg: 'Min height should be 1',
 					},
 					max: {
 						args: [999],
@@ -127,14 +134,15 @@ module.exports = (sequelize) => {
 		},
 		weight: {
 			type: DataTypes.FLOAT,
+			defaultValue: 1,
 			validate: {
 				min: {
-					args: [0.01],
-					msg: 'Min weight should be 0.01 Kg',
+					args: [1],
+					msg: 'Min weight should be 1',
 				},
 				max: {
 					args: [999],
-					msg: 'Max weight should be 999 kg',
+					msg: 'Max weight should be 999',
 				},
 			},
 		},
