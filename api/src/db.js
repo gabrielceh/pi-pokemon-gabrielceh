@@ -2,17 +2,23 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
-const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
-// const BlacklistModel = require('./models/BlackList');
-// const PokemonApiModel = require('./models/Pokemon-Api');
-// const PokemonModel = require('./models/Pokemon');
-// const TypesModel = require('./models/Types');
-// const UserModel = require('./models/User');
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_URL, MODE } = process.env;
 
-const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pokemon`, {
-	logging: false, // set to console.log to see the raw SQL queries
-	native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-});
+// development
+// const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pokemon`, {
+// 	logging: false, // set to console.log to see the raw SQL queries
+// 	native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+// });
+
+// produccion
+const sequelize = new Sequelize(
+	MODE === 'production' ? DB_URL : `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pokemon`,
+	{
+		logging: false, // set to console.log to see the raw SQL queries
+		native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+	}
+);
+
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
